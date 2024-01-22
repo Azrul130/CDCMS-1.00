@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <servlet>
+        <servlet-name>highcouncilController</servlet-name>
+        <servlet-class>com.cdcms.controller.Controller</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>activityController</servlet-name>
+        <servlet-class>com.cdcms.controller.activityController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DownloadProposalServlet</servlet-name>
+        <servlet-class>com.cdcms.controller.DownloadProposalServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>highcouncilController</servlet-name>
+        <url-pattern>/highcouncilController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>activityController</servlet-name>
+        <url-pattern>/activityController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DownloadProposalServlet</servlet-name>
+        <url-pattern>/DownloadProposalServlet</url-pattern>
+    </servlet-mapping>
+        <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.png</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpeg</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+</web-app>
