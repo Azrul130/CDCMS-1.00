@@ -33,7 +33,7 @@ public class activity {
     public activity() {
     }
 
-    public activity(int activity_id, String activity_title, String activity_description, String activity_place, String activity_date, String activity_time, String activity_status, String activity_proposalname, String activity_proposalpath, byte[] activity_photo) {
+    public activity(int activity_id, String activity_title, String activity_description, String activity_place, String activity_date, String activity_time, String activity_status, String activity_proposalname, String activity_proposalpath, int highcouncil_id) {
         this.activity_id = activity_id;
         this.activity_title = activity_title;
         this.activity_description = activity_description;
@@ -43,7 +43,22 @@ public class activity {
         this.activity_status = activity_status;
         this.activity_proposalname = activity_proposalname;
         this.activity_proposalpath = activity_proposalpath;
-        this.activity_photo = activity_photo;
+        this.highcouncil_id = highcouncil_id;
+    }
+    
+    
+
+    public activity(int activity_id, String activity_title, String activity_description, String activity_place, String activity_date, String activity_time, String activity_status, String activity_proposalname, String activity_proposalpath) {
+        this.activity_id = activity_id;
+        this.activity_title = activity_title;
+        this.activity_description = activity_description;
+        this.activity_place = activity_place;
+        this.activity_date = activity_date;
+        this.activity_time = activity_time;
+        this.activity_status = activity_status;
+        this.activity_proposalname = activity_proposalname;
+        this.activity_proposalpath = activity_proposalpath;
+       
     }
 
     public activity(int activity_id, String activity_title, String activity_description, String activity_place, String activity_date, String activity_time, String activity_status, String activity_proposalname, String activity_proposalpath, byte[] activity_photo, int highcouncil_id) {

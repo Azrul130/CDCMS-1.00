@@ -27,11 +27,11 @@ public class ActivityDAO {
     static String password = "admin";
 
     private static final String add_activity = "INSERT INTO activity(activity_title, activity_description, activity_place, activity_date, activity_time, activity_status, activity_proposalname, activity_proposalpath, highcouncil_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String select_activity_by_id = "select activity_id, activity_title, activity_description, activity_place, activity_date, activity_time, activity_status, activity_proposalname, activity_proposalpath, activity_photo from activity where activity_id =?";
+    private static final String select_activity_by_id = "select activity_id, activity_title, activity_description, activity_place, activity_date, activity_time, activity_status, activity_proposalname, activity_proposalpath from activity where activity_id =?";
     private static final String select_all_activity = "select * from activity";
     private static final String delete_activity = "delete from activity where activity_id=?";
-    private static final String update_activity = "update activity set activity_title=?, activity_description=?, activity_place=?, activity_date=?, activity_time=?, activity_status=?, activity_photo=? where activity_id=?";
-    private static final String select_activity_by_hcid = "select activity_id, activity_title, activity_description, activity_place, activity_date, activity_time, activity_status, activity_proposalname, activity_proposalpath, activity_photo, highcouncil_id from activity where highcouncil_id=?";
+    private static final String update_activity = "update activity set activity_title=?, activity_description=?, activity_place=?, activity_date=?, activity_time=?, activity_status=? where activity_id=?";
+    private static final String select_activity_by_hcid = "select activity_id, activity_title, activity_description, activity_place, activity_date, activity_time, activity_status, activity_proposalname, activity_proposalpath, highcouncil_id from activity where highcouncil_id=?";
 
     public ActivityDAO() {
     }
@@ -95,8 +95,8 @@ public class ActivityDAO {
                 String status = rs.getString("activity_status");
                 String proposalname = rs.getString("activity_proposalname");
                 String proposalpath = rs.getString("activity_proposalpath");
-                byte[] photo = rs.getBytes("activity_photo");
-                act.add(new activity(id, title, des, place, date, time, status, proposalname, proposalpath, photo));
+                
+                act.add(new activity(id, title, des, place, date, time, status, proposalname, proposalpath));
             }
         } catch (SQLException e) {
             printSQLException(e);
@@ -122,8 +122,7 @@ public class ActivityDAO {
             statement.setString(4, act.getActivity_date());
             statement.setString(5, act.getActivity_time());
             statement.setString(6, act.getActivity_status());
-            statement.setBytes(7, act.getPicture());
-            statement.setInt(8, act.getActivity_id());
+            statement.setInt(7, act.getActivity_id());
             rowUpdated = statement.executeUpdate() > 0;
         }
         return rowUpdated;
@@ -145,8 +144,8 @@ public class ActivityDAO {
                 String status = rs.getString("activity_status");
                 String proposalname = rs.getString("activity_proposalname");
                 String proposalpath = rs.getString("activity_proposalpath");
-                byte[] photo = rs.getBytes("activity_photo");
-                act = new activity(activity_id, title, des, place, date, time, status, proposalname, proposalpath, photo);
+            
+                act = new activity(activity_id, title, des, place, date, time, status, proposalname, proposalpath);
             }
         } catch (SQLException e) {
             printSQLException(e);
@@ -171,8 +170,8 @@ public class ActivityDAO {
                 String status = rs.getString("activity_status");
                 String proposalname = rs.getString("activity_proposalname");
                 String proposalpath = rs.getString("activity_proposalpath");
-                byte[] photo = rs.getBytes("activity_photo");
-                act.add(new activity(actid, title, des, place, date, time, status, proposalname, proposalpath, photo, highcouncil_id));
+                //byte[] photo = rs.getBytes("activity_photo");
+                act.add(new activity(actid, title, des, place, date, time, status, proposalname, proposalpath, highcouncil_id));
             }
         } catch (SQLException e) {
             printSQLException(e);

@@ -203,7 +203,7 @@
 
 
         <footer>
-            <p>&copy; 2022 CDCMS. All rights reserved.</p>
+            <p>&copy; 2024 CDCMS. All rights reserved.</p>
         </footer>
     </body>
 
