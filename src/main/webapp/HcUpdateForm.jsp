@@ -1,6 +1,6 @@
 <%-- 
-    Document   : activity
-    Created on : 3 Jan 2024, 1:38:07 am
+    Document   : HcRegForm
+    Created on : 2 Jan 2024, 11:11:49 pm
     Author     : Azrul Hafizam
 --%>
 
@@ -103,6 +103,8 @@
             input[type="time"],
             input[type="file"],
             input[type="date"],
+            input[type="email"],
+            input[type="password"],
             textarea {
                 width: 100%;
                 padding: 12px 20px;
@@ -182,25 +184,37 @@
         <main>
 
             <div class="form-container">
-                <form action="updateact?activity_id=${activity.activity_id}&activity_status=${activity.activity_status}&activity_proposalname=${activity.activity_proposalname}&highcouncil_id=${activity.highcouncil_id}" method="post" enctype="multipart/form-data">
-                    <h1>Update Activity</h1>
-                    <label for="title">Title</label>
-                    <input type="text" id="title" name="title" value="${activity.activity_title}">
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" rows="5" cols="50" maxlength="200">${activity.activity_description}</textarea>
-                    <label for="place">Place</label>
-                    <input type="text" id="place" name="place" value="${activity.activity_place}">
-                    <label for="date">Date</label>
-                    <input type="date" id="date" name="date" value="${activity.activity_date}">
-                    <label for="time">Time</label>
-                    <input type="time" id="time" name="time" value="${activity.activity_time}">
-                    <label for="proposal">Proposal</label><br>
-                    <label style="color: red">Note: Please delete and create a new activity if you want to update the proposal!!!</label>
-                    <button type="submit">Submit</button>
+                <form action="updatehc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>" method="POST" enctype="multipart/form-data">
+                    <h1>Update Profile</h1>
+                    <label>Name</label>
+                    <input type="text" name="name" id="name" 
+                           value="<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_name()%>"><!-- comment -->
+                    <br><!-- comment -->
+
+                    <label>Email</label>
+                    <input type="email" name="email" id="email" 
+                           value="<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_email()%>"><!-- comment -->
+                    <br><!-- comment -->
+
+                    <label>Phone Number</label>
+                    <input type="text" name="phonenum" id="phonenum" 
+                           value="<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_phonenum()%>"><!-- comment -->
+                    <br><!-- comment -->
+
+                    <label>Body Number</label>
+                    <input type="text" name="bodynum" id="bodynum" 
+                           value="<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_bodynum()%>"><!-- comment -->
+                    <br><!-- comment -->
+
+                    <label>Password</label>
+                    <input type="password" name="password" id="password" 
+                           value="<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_password()%>"><!-- comment -->
+                    <br><!-- comment -->
+                   <button type="submit">Submit</button>
                 </form>
             </div>
-        </main>
 
+        </main>
 
         <footer>
             <p>&copy; 2024 CDCMS. All rights reserved.</p>

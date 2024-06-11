@@ -21,17 +21,21 @@
                 margin: 0;
                 padding: 0;
                 overflow:auto;
+                background-image: url("bglogin.jpg");
+                background-size: 100%;
             }
 
             img {
-                width: 10%;
+                width: 9%;
             }
 
             header {
-                background-color: lightblue;
-                background-image: url("head_login.jpg");
+                background: transparent;
+                <%--background-image: url("head_login.jpg");--%>
                 background-size: 10%;
-                padding: 40px;
+                padding: 30px;
+                padding-bottom: 20px;
+                padding-top: 20px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -40,9 +44,7 @@
 
             main {
                 padding: 50px;
-                padding-bottom: 80px;
-                background-color: blue;
-
+                padding-bottom: 40px;
             }
 
             .head {
@@ -54,11 +56,6 @@
             h1 {
                 font-family: "Georgia", Times, serif;
                 text-align: center;
-                text-shadow:
-                    -1px -1px 0 lightblue,
-                    1px -1px 0 lightblue,
-                    -1px 1px 0 lightblue,
-                    1px 1px 0 lightblue;
             }
 
             h2 {
@@ -72,12 +69,8 @@
                     2px 2px 0 white;
             }
 
-            footer {
-                padding: 30px;
-            }
-
             .container {
-                height: 100px;
+                height: 80px;
             }
 
             .form-container {
@@ -91,7 +84,7 @@
             }
 
             input[type="text"],
-            input[type="email"],          
+            input[type="email"],
             input[type="password"] {
                 width: 100%;
                 padding: 12px 20px;
@@ -126,12 +119,6 @@
                 text-decoration: underline;
             }
 
-            footer {
-                background-color: lightblue;
-                padding: 10px;
-                text-align: center;
-            }
-
             .logintype {
                 display: flex;
                 align-items: center;
@@ -162,7 +149,7 @@
         <main>
             <div class="form-container">
                 <form action="processLogin.jsp" method="post">
-                    <h1>Login</h1>
+                    <h2>Login</h2>
                     <% if (request.getAttribute("loginStatus") != null && (boolean)request.getAttribute("loginStatus") == false) { %>
                     <div class="alert alert-danger" role="alert">
                         Login Unsuccessful
@@ -170,10 +157,8 @@
                     <% } %>
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" required>
-
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
-
                     <input type="radio" id="mem" name="loginType" value="1">
                     <label for="mem">Member</label>
                     <input type="radio" id="hc" name="loginType" value="2" checked>
@@ -187,9 +172,6 @@
                 <p>Not a member? <a href="RegisterType.jsp" class="login-link">Register</a></p>
             </div>
         </main>
-        <footer>
-            <p>&copy; 2023 CDCMS. All rights reserved.</p>
-        </footer>
     </body>
 </html>
 

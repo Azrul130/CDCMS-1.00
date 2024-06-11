@@ -1,12 +1,12 @@
 <%-- 
-    Document   : activity
-    Created on : 3 Jan 2024, 1:38:07 am
+    Document   : AssetForm
+    Created on : 22 May 2024, 5:08:27 pm
     Author     : Azrul Hafizam
 --%>
 
+
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page import="com.cdcms.dao.*" %>
 <%@page import="com.cdcms.model.*" %>
 <%@page import="com.cdcms.controller.*" %>
@@ -29,7 +29,7 @@
                 background-size: 50px;
             }
 
-            h1 {
+            h2 {
                 text-align: center;
             }
 
@@ -100,7 +100,7 @@
             }
 
             input[type="text"],
-            input[type="time"],
+            input[type="number"],
             input[type="file"],
             input[type="date"],
             textarea {
@@ -157,6 +157,7 @@
                 resize: none;
             }
         </style>
+        
     </head>
 
     <body>
@@ -167,43 +168,33 @@
 
         <nav>
             <ul>
-                <li><a href="<%=request.getContextPath()%>/listacthc?highcouncil_id= <%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%> " 
-                       >Activity</a>
+                <li>
+                    <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
                 </li>
-                <li><a href="#">Aset</a></li>
+                <li><a href="AsetHC.jsp">Aset</a></li>
                 <li><a href="#">Report</a></li>
-                <li style="background-color:blue; padding-top: 14px; padding-bottom: 14px;"
-                    ><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>"
-                    >Account</a></li>
+                <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>
 
         <main>
-
             <div class="form-container">
-                <form action="updateact?activity_id=${activity.activity_id}&activity_status=${activity.activity_status}&activity_proposalname=${activity.activity_proposalname}&highcouncil_id=${activity.highcouncil_id}" method="post" enctype="multipart/form-data">
-                    <h1>Update Activity</h1>
-                    <label for="title">Title</label>
-                    <input type="text" id="title" name="title" value="${activity.activity_title}">
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" rows="5" cols="50" maxlength="200">${activity.activity_description}</textarea>
-                    <label for="place">Place</label>
-                    <input type="text" id="place" name="place" value="${activity.activity_place}">
-                    <label for="date">Date</label>
-                    <input type="date" id="date" name="date" value="${activity.activity_date}">
-                    <label for="time">Time</label>
-                    <input type="time" id="time" name="time" value="${activity.activity_time}">
-                    <label for="proposal">Proposal</label><br>
-                    <label style="color: red">Note: Please delete and create a new activity if you want to update the proposal!!!</label>
+                <form action="addAsset" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                    <h2>New Asset</h2>
+                    <label for="name">Asset Name</label>
+                    <input type="text" id="name" name="name" required>
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" name="quantity" required>
+                    <label for="photo">Photo</label>
+                    <input type="file" id="photo" name="photo" required>                    
                     <button type="submit">Submit</button>
                 </form>
             </div>
         </main>
 
-
         <footer>
-            <p>&copy; 2024 CDCMS. All rights reserved.</p>
+            <p>&copy; 2022 CDCMS. All rights reserved.</p>
         </footer>
     </body>
 

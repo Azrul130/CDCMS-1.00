@@ -144,7 +144,6 @@ public class ActivityDAO {
                 String status = rs.getString("activity_status");
                 String proposalname = rs.getString("activity_proposalname");
                 String proposalpath = rs.getString("activity_proposalpath");
-            
                 act = new activity(activity_id, title, des, place, date, time, status, proposalname, proposalpath);
             }
         } catch (SQLException e) {

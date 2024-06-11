@@ -20,7 +20,7 @@ public class highcouncil {
     }
 
     public highcouncil(String highcouncil_name, String highcouncil_email, String highcouncil_password, String highcouncil_phonenum, String highcouncil_bodynum) {
-        super();
+        
         this.highcouncil_name = highcouncil_name;
         this.highcouncil_email = highcouncil_email;
         this.highcouncil_password = highcouncil_password;
@@ -29,7 +29,7 @@ public class highcouncil {
     }
 
     public highcouncil(int highcouncil_id, String highcouncil_name, String highcouncil_email, String highcouncil_password, String highcouncil_phonenum, String highcouncil_bodynum) {
-        super();
+        
         this.highcouncil_id = highcouncil_id;
         this.highcouncil_name = highcouncil_name;
         this.highcouncil_email = highcouncil_email;
@@ -37,8 +37,6 @@ public class highcouncil {
         this.highcouncil_phonenum = highcouncil_phonenum;
         this.highcouncil_bodynum = highcouncil_bodynum;
     }
-    
-    
 
     public int getHighcouncil_id() {
         return highcouncil_id;
@@ -87,6 +85,9 @@ public class highcouncil {
     public void setHighcouncil_bodynum(String highcouncil_bodynum) {
         this.highcouncil_bodynum = highcouncil_bodynum;
     }
+        
+
+    
     
     
 }

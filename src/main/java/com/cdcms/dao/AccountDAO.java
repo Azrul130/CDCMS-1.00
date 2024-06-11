@@ -27,8 +27,8 @@ public class AccountDAO {
     //sql for highcouncil
     private static final String Add_New_HC = "INSERT INTO highcouncil(highcouncil_name, highcouncil_email, highcouncil_password, highcouncil_phonenum, highcouncil_bodynum) values (?,?,?,?,?)";
     private static final String View_All_HC = "SELECT * FROM highcouncil";
-    private static final String View_HC_By_Id = "SELECT * FROM highcouncil WHERE highcouncil_id = ?";
-    private static final String Edit_HC = "UPDATE highcouncil SET highcouncil_name=?, highcouncil_email=?, highcouncil_password=?, highcouncil_phonenum=?, highcouncil_bodynum=? WHERE highcouncil_id=?";
+    private static final String View_HC_By_Id = "SELECT highcouncil_name, highcouncil_email, highcouncil_password, highcouncil_phonenum, highcouncil_bodynum WHERE highcouncil_id = ?";
+    private static final String Update_HC = "UPDATE highcouncil SET highcouncil_name=?, highcouncil_email=?, highcouncil_password=?, highcouncil_phonenum=?, highcouncil_bodynum=? WHERE highcouncil_id=?";
     private static final String Delete_HC = "DELETE FROM highcouncil WHERE highcouncil_id=?";
 
     //sql for advisor
@@ -69,24 +69,47 @@ public class AccountDAO {
         }
     }
 
-    public highcouncil selectHC(int highcouncil_id) throws SQLException {
+    public boolean Update_HC(highcouncil hc) throws SQLException {
+        boolean rowUpdated;
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(Update_HC);) {
+            statement.setString(1, hc.getHighcouncil_name());
+            statement.setString(2, hc.getHighcouncil_email());
+            statement.setString(3, hc.getHighcouncil_password());
+            statement.setString(4, hc.getHighcouncil_phonenum());
+            statement.setString(5, hc.getHighcouncil_bodynum());
+            statement.setInt(6, hc.getHighcouncil_id());
+            rowUpdated = statement.executeUpdate() > 0;
+        }
+        return rowUpdated;
+    }
+
+    public highcouncil selectHC_byId(int highcouncil_id) throws SQLException {
         highcouncil hclist = null;
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(View_HC_By_Id);) {
             preparedStatement.setInt(1, highcouncil_id);
             System.out.println(preparedStatement);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                String hcname = rs.getString("name");
-                String hcemail = rs.getString("email");
-                String hcpassword = rs.getString("password");
-                String hcphonenum = rs.getString("phonenum");
-                String hcbodynum = rs.getString("bodynum");
+                String hcname = rs.getString("highcouncil_name");
+                String hcemail = rs.getString("highcouncil_email");
+                String hcpassword = rs.getString("highcouncil_password");
+                String hcphonenum = rs.getString("highcouncil_phonenum");
+                String hcbodynum = rs.getString("highcouncil_bodynum");
                 highcouncil HC = new highcouncil(highcouncil_id, hcname, hcemail, hcpassword, hcphonenum, hcbodynum);
             }
         } catch (SQLException e) {
             printSQLException(e);
         }
         return hclist;
+    }
+
+    public boolean deletehc(int highcouncil_id) throws SQLException {
+        boolean rowDeleted;
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(Delete_HC);) {
+            statement.setInt(1, highcouncil_id);
+            rowDeleted = statement.executeUpdate() > 0;
+        }
+        return rowDeleted;
     }
 
     private void printSQLException(SQLException ex) {

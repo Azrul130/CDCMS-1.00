@@ -1,22 +1,14 @@
 <%-- 
-    Document   : activity
-    Created on : 3 Jan 2024, 1:38:07 am
+    Document   : AssetList
+    Created on : 26 May 2024, 5:34:17 pm
     Author     : Azrul Hafizam
 --%>
 
-<%@ page import="jakarta.servlet.http.HttpSession" %>
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page import="com.cdcms.dao.*" %>
-<%@page import="com.cdcms.model.*" %>
-<%@page import="com.cdcms.controller.*" %>
-<%@page import="java.util.List" %>
-
-
-
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.cdcms.model.highcouncil" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,6 +17,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 
         <style>
 
@@ -160,7 +153,6 @@
                 }
             }
         </style>
-
         <script>
             function confirmDelete(activityId) {
                 var confirmation = confirm("Are you sure you want to delete this activity?");
@@ -172,7 +164,6 @@
             }
         </script>
     </head>
-
     <body>
         <header>
             <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
@@ -191,51 +182,60 @@
             </ul>
         </nav>
 
+        <%-- TENGOK MACAM MANA NAK SHOW PHOTO
+             PASTU BAIKI CONTROLLER BIAR BOLEH SHOW PHOTO--%>
+
         <main>
             <div class="row">
                 <div class="container">
-                    <h3  class="text-center"><strong>List of Activity</strong></h3>
+                    <h3  class="text-center"><strong>List of Asset</strong></h3>
                     <hr><!-- comment -->
                     <div class="container text-left">
-                        <a href="<%=request.getContextPath()%>/newact" class="btn btn-success" style=" background-color: orangered;">Add New Activity</a> 
+                        <a href="<%=request.getContextPath()%>/newAsset" class="btn btn-success" style=" background-color: orangered;">Add New Asset</a> 
                     </div>
                     <br><!-- comment -->
                     <table id="act">
-                        <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Place</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Status</th>
-                            <th>Proposal</th>
-                            <th>Action</th>
-                        </tr>
-
-                        <c:forEach var="activity" items="${listActHc}">
+                        <thead>
                             <tr>
-                                <td>${activity.activity_title}</td>
-                                <td>${activity.activity_description}</td>
-                                <td>${activity.activity_place}</td>
-                                <td>${activity.activity_date}</td>
-                                <td>${activity.activity_time}</td>
-                                <td>${activity.activity_status}</td>
-                                <td><a class="btn btn-success" href="proposal?activity_proposalname=${activity.activity_proposalname}">Download</a></td>
-                                <td>
-                                    <a class="btn btn-success" style=" background-color: orangered;" href="editact?activity_id=${activity.activity_id}">Update</a>
-                                    <a style="background-color: orangered;" class="btn btn-success" 
-                                       href="deleteact?activity_id=${activity.activity_id}&highcouncil_id=${activity.highcouncil_id}" 
-                                       onclick="confirmDelete(event, this.href)">Delete</a>
-                                </td>
+                                <th>Name</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Photo</th>
+                                <th>Action</th>
                             </tr>
-                        </c:forEach>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="asset" items="${listAsset}">
+                                <tr>
+                                    <td><c:out value="${asset.asset_name}" /></td>
+                                    <td><c:out value="${asset.asset_quantity}" /></td>
+                                    <td><c:out value="${asset.asset_status}" /></td>
+
+                                    <td>
+                                        <c:set var="base64Picture" value="${asset.getAsset_photoBase64()}"/>
+                                        <c:if test="${not empty base64Picture}">
+                                            <img src="data:image/png;base64,${base64Picture}" width="100" height="100" />
+                                        </c:if>
+                                    </td>
+
+                                    <td>
+                                        <a class="btn btn-success" style=" background-color: orangered;" 
+                                           href="editAst?asset_id=<c:out value="${asset.asset_id}" />">Update</a>
+                                        <a id="deleteButton" class="btn btn-success" style="background-color: red;" 
+                                           href="deleteAsset?asset_id=${asset.asset_id}">Delete</a><br>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
                     </table>
                 </div>
             </div>
         </main>
         <script type="text/javascript">
-            function confirmDelete(event, url) {
+            document.getElementById('deleteButton').addEventListener('click', function (event) {
                 event.preventDefault(); // Prevent the default anchor behavior
+
+                const url = this.href; // Get the URL from the href attribute
 
                 Swal.fire({
                     title: "Are you sure?",
@@ -256,12 +256,11 @@
                         });
                     }
                 });
-            }
+            });
         </script>
 
         <footer>
             <p>&copy; 2022 CDCMS. All rights reserved.</p>
         </footer>
     </body>
-
 </html>

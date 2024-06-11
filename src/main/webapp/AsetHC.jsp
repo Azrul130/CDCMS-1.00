@@ -1,18 +1,29 @@
 <%-- 
-    Document   : Dashboard
-    Created on : 3 Jan 2024, 12:39:16 am
+    Document   : activity
+    Created on : 3 Jan 2024, 1:38:07 am
     Author     : Azrul Hafizam
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="com.cdcms.model.highcouncil" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="jakarta.servlet.http.HttpSession" %>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="com.cdcms.dao.*" %>
+<%@page import="com.cdcms.model.*" %>
+<%@page import="com.cdcms.controller.*" %>
+<%@page import="java.util.List" %>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CDCMS</title>
+        <title>Aset Management(ADMIN)</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
         <style>
 
             html, body {
@@ -30,9 +41,11 @@
 
             }
 
-            h2{
+            h3{
+                background-color: orange;
                 padding: 10px;
-                font-size: 30px;
+                border:#000;
+                border-radius: 20px;
             }
 
             header {
@@ -90,17 +103,10 @@
 
 
             main {
-                background-color: white; 
                 padding: 20px;
-                margin-left: 30px;
-                margin-right:30px;
-                margin-bottom: 150px;
-                margin-top: 50px;
                 box-sizing: border-box;
                 background-size: 200%;
                 background-position:center;
-                border-radius: 30px;
-                height: 30px;
                 padding-bottom: 150px;
 
             }
@@ -150,30 +156,35 @@
                 .btn {
                     background-color: orange;
                 }
-                
-                    #welcome-message {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 24px;
-            color: white;
-            text-shadow: 1px 1px 1px #333;
-        }
 
 
             }
         </style>
+
+        <script>
+            function confirmDelete(activityId) {
+                var confirmation = confirm("Are you sure you want to delete this activity?");
+                if (confirmation === true) {
+                    window.location.href = "deleteact?activity_id=" + activityId;
+                } else {
+                    window.location.href = "listacthc?activity_id=" + activityId;
+                }
+            }
+        </script>
     </head>
+
     <body>
         <header>
-            <h1>CDCMS</h1>
+            <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
+            <a href="Dashboard.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
         </header>
 
         <nav>
             <ul>
-                <li>
-                    <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
+                <li style="background-color:blue; padding-top: 14px; padding-bottom: 14px;">
+                    <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id= <%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%> " style="background-color:blue; padding-top: 14px; padding-bottom: 14px;">Activity</a>
                 </li>
-                <li><a href="<%=request.getContextPath()%>/listAsset">Aset</a></li>
+                <li><a href="AsetHC.jsp">Aset</a></li>
                 <li><a href="#">Report</a></li>
                 <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
@@ -181,16 +192,13 @@
         </nav>
 
         <main>
-        <!-- Welcoming message -->
-        <div id="welcome-message">
-            <h2>Welcome, <%=((highcouncil) session.getAttribute("hc")).getHighcouncil_name()%>!</h2>
-        </div>
 
-        <!-- Rest of your content goes here -->
-    </main>
+        </main>
+
 
         <footer>
             <p>&copy; 2022 CDCMS. All rights reserved.</p>
         </footer>
     </body>
+
 </html>

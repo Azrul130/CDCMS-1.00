@@ -6,12 +6,13 @@ package com.cdcms.controller;
 
 import com.cdcms.dao.ActivityDAO;
 import com.cdcms.dao.AccountDAO;
+import com.cdcms.dao.AssetDAO;
 import com.cdcms.model.activity;
+import com.cdcms.model.asset;
 import com.cdcms.model.highcouncil;
 import java.util.List;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -44,6 +45,7 @@ public class Controller extends HttpServlet {
 
     private AccountDAO dao;
     private ActivityDAO dao2;
+    private AssetDAO dao3;
     PrintWriter out = null;
     Connection con = null;
     PreparedStatement ps = null;
@@ -56,6 +58,7 @@ public class Controller extends HttpServlet {
     public void init() {
         dao = new AccountDAO();
         dao2 = new ActivityDAO();
+        dao3 = new AssetDAO();
     }
 
     @Override
@@ -71,10 +74,24 @@ public class Controller extends HttpServlet {
 
         try {
             switch (action) {
+                //Account Module -----------------------------------------------
                 case "/addHC":
                     AddHC(request, response);
                     break;
+                case "/viewhcprofile":
+                    viewProfile(request, response);
+                    break;
+                case "/edithc":
+                    updatehcForm(request, response);
+                    break;
+                case "/updatehc":
+                    updatehc(request, response);
+                    break;
+                case "/deletehc":
+                    deletehc(request, response);
+                    break;
 
+                //Activity Module ----------------------------------------------
                 case "/newact":
                     showNewFormAct(request, response);
                     break;
@@ -106,13 +123,32 @@ public class Controller extends HttpServlet {
                     listAct(request, response);
                     break;
 
-                //------------------------------------------------------
+                //Asset Module -------------------------------------------------
+                case "/addAsset":
+                    addAsset(request, response);
+                    break;
+                case "/newAsset":
+                    showNewFormAst(request, response);
+                    break;
+                case "/editAst":
+                    showEditFormAst(request, response);
+                    break;
+                case "/updateAsset":
+                    updateAsset(request, response);
+                    break;
+                case "/listAsset":
+                    listAsset(request, response);
+                    break;
+                case "/deleteAsset":
+                    deleteAsset(request, response);
+                    break;
             }
         } catch (SQLException ex) {
             throw new ServletException(ex);
         }
     }
 
+    //Account Module
     protected void AddHC(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         String hcname = request.getParameter("name");
@@ -125,6 +161,50 @@ public class Controller extends HttpServlet {
         response.sendRedirect("LoginPage.jsp");
     }
 
+    protected void viewProfile(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        String inputString = request.getParameter("highcouncil_id");
+        inputString = inputString.trim(); // Remove leading and trailing whitespaces
+        int hcid = Integer.parseInt(inputString);
+        highcouncil viewhc = dao.selectHC_byId(hcid);
+        request.setAttribute("highcouncil", viewhc);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("profilehc.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    protected void updatehcForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int highcouncil_id = Integer.parseInt(request.getParameter("highcouncil_id"));
+        highcouncil existinghc = dao.selectHC_byId(highcouncil_id);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("HcUpdateForm.jsp");
+        request.setAttribute("highcouncil", existinghc);
+        dispatcher.forward(request, response);
+    }
+    
+    protected void updatehc(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        highcouncil hc = new highcouncil();
+        int hcid = Integer.parseInt(request.getParameter("highcouncil_id"));
+        hc.setHighcouncil_id(hcid);
+        hc.setHighcouncil_name(request.getParameter("name"));
+        hc.setHighcouncil_email(request.getParameter("email"));
+        hc.setHighcouncil_password(request.getParameter("password"));
+        hc.setHighcouncil_phonenum(request.getParameter("phonenum"));
+        hc.setHighcouncil_bodynum(request.getParameter("bodynum"));
+        dao.Update_HC(hc);
+        response.sendRedirect("viewhcprofile?highcouncil_id=" + hcid);
+    }
+
+    
+    protected void deletehc(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int id = Integer.parseInt(request.getParameter("highcouncil_id"));
+        dao.deletehc(id);
+        int hcid = Integer.parseInt(request.getParameter("highcouncil_id"));
+        response.sendRedirect("LoginPage.jsp");
+    }
+
+    //Activity Module --------------------------------------------------------------------------------------------------
     protected void listAct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         List<activity> listAct = dao2.selectAllActivity();
@@ -197,6 +277,7 @@ public class Controller extends HttpServlet {
             act.setActivity_time(request.getParameter("time"));
             act.setActivity_status("Pending");
             Part filePart = request.getPart("proposal");
+
             String fileName = filePart.getSubmittedFileName();
             String path = folderName + File.separator + fileName;
             InputStream is = filePart.getInputStream();
@@ -204,6 +285,7 @@ public class Controller extends HttpServlet {
             act.setActivity_proposalname(fileName);
             act.setActivity_proposalpath(path);
             act.setHighcouncil_id(Integer.parseInt(request.getParameter("highcouncil_id")));
+
             dao2.addActivity(act);
             int hcid = Integer.parseInt(request.getParameter("highcouncil_id"));
             RequestDispatcher rd = request.getRequestDispatcher("listacthc?highcouncil=" + hcid);
@@ -218,6 +300,7 @@ public class Controller extends HttpServlet {
     protected void updateAct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         activity act = new activity();
+        int hcid = Integer.parseInt(request.getParameter("highcouncil_id"));
         int actid = Integer.parseInt(request.getParameter("activity_id"));
         act.setActivity_id(actid);
         act.setActivity_title(request.getParameter("title"));
@@ -227,8 +310,8 @@ public class Controller extends HttpServlet {
         act.setActivity_time(request.getParameter("time"));
         act.setActivity_status(request.getParameter("activity_status"));
         dao2.updateActivity(act);
-        int hcid = Integer.parseInt(request.getParameter("highcouncil_id"));
-        response.sendRedirect("listacthc?highcouncil_id=" + hcid);
+        RequestDispatcher rd = request.getRequestDispatcher("listacthc?highcouncil_id=" + hcid);
+        rd.forward(request, response);
     }
 
     protected void updateActStatus(HttpServletRequest request, HttpServletResponse response)
@@ -251,7 +334,8 @@ public class Controller extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("activity_id"));
         dao2.deleteActivity(id);
         int hcid = Integer.parseInt(request.getParameter("highcouncil_id"));
-        response.sendRedirect("listacthc?highcouncil_id=" + hcid);
+        RequestDispatcher rd = request.getRequestDispatcher("listacthc?highcouncil=" + hcid);
+        rd.forward(request, response);
     }
 
     protected void DownloadProposal(HttpServletRequest request, HttpServletResponse response)
@@ -345,4 +429,62 @@ public class Controller extends HttpServlet {
 
     }
 
+    //Asset Module------------------------------------------------------------------------------------------------
+    protected void showNewFormAst(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("AssetForm.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    protected void showEditFormAst(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int astid = Integer.parseInt(request.getParameter("asset_id"));
+        asset existingAst = dao3.viewallAsset_byID(astid);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("AssetUpdateForm.jsp");
+        request.setAttribute("asset", existingAst);
+        dispatcher.forward(request, response);
+    }
+
+    public void addAsset(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        asset ast = new asset();
+        ast.setAsset_name(request.getParameter("name"));
+        ast.setAsset_quantity(Integer.parseInt(request.getParameter("quantity")));
+        ast.setAsset_status("Available");
+        Part filePart = request.getPart("photo");
+        InputStream fileContent = filePart.getInputStream();
+        byte[] fileData = fileContent.readAllBytes();
+        ast.setAsset_photo(fileData);
+        dao3.addAsset(ast);
+        RequestDispatcher rd = request.getRequestDispatcher("listAsset");
+        rd.forward(request, response);
+    }
+
+    protected void listAsset(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        HttpSession session = request.getSession();
+        List<asset> listAsset = dao3.viewallAsset();
+        session.setAttribute("listAsset", listAsset);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("AssetList.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    protected void updateAsset(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        asset ast = new asset();
+        int astid = Integer.parseInt(request.getParameter("asset_id"));
+        ast.setAsset_id(astid);
+        ast.setAsset_name(request.getParameter("name"));
+        ast.setAsset_quantity(Integer.parseInt(request.getParameter("quantity")));
+        ast.setAsset_status(request.getParameter("status"));
+        dao3.updateAsset(ast);
+        RequestDispatcher rd = request.getRequestDispatcher("listAsset");
+        rd.forward(request, response);
+    }
+
+    protected void deleteAsset(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int id = Integer.parseInt(request.getParameter("asset_id"));
+        dao3.deleteAsset(id);
+        response.sendRedirect("listAsset");
+    }
 }

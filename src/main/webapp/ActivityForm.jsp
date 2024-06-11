@@ -183,12 +183,12 @@
 
         <nav>
             <ul>
-                <li style="background-color:blue; padding-top: 14px; padding-bottom: 14px;">
-                    <a href="<%=request.getContextPath()%>/actlist" style="background-color:blue; padding-top: 14px; padding-bottom: 14px;">Activity</a>
+                <li>
+                    <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
                 </li>
-                <li><a href="#">Aset</a></li>
+                <li><a href="AsetHC.jsp">Aset</a></li>
                 <li><a href="#">Report</a></li>
-                <li><a href="#">Account</a></li>
+                <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>
