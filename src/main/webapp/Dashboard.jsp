@@ -4,9 +4,13 @@
     Author     : Azrul Hafizam
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="com.cdcms.model.highcouncil" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@page import="com.cdcms.dao.*" %>
+<%@page import="com.cdcms.model.*" %>
+<%@page import="com.cdcms.controller.*" %>
+<%@page import="jakarta.servlet.ServletContext" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -183,7 +187,7 @@
         <main>
         <!-- Welcoming message -->
         <div id="welcome-message">
-            <h2>Welcome, <%=((highcouncil) session.getAttribute("hc")).getHighcouncil_name()%>!</h2>
+            <h2>Welcome, <c:out value="${highcouncil.highcouncil_name}"/>!</h2>
         </div>
 
         <!-- Rest of your content goes here -->

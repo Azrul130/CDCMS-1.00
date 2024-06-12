@@ -52,7 +52,7 @@
                 if (hc != null && hc.getHighcouncil_email() != null && hc.getHighcouncil_email().equals(email) 
                     && hc.getHighcouncil_password().equals(pass) ){
                     out.print("<h1>login Success</h1>");
-                    session.setAttribute("hc", hc);
+                    session.setAttribute("highcouncil", hc);
                     response.sendRedirect("Dashboard.jsp");                
                 } else {
                     request.setAttribute("loginStatus", false);

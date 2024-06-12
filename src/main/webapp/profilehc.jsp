@@ -4,11 +4,13 @@
     Author     : Azrul Hafizam
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="jakarta.servlet.http.HttpSession" %>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page import="com.cdcms.dao.*" %>
 <%@page import="com.cdcms.model.*" %>
+<%@page import="com.cdcms.controller.*" %>
+<%@page import="jakarta.servlet.ServletContext" %>
 
 <!DOCTYPE html>
 <html>
@@ -168,7 +170,7 @@
     <body>
         <header>
             <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
-            <a href="Dashboard.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
+            <a href="Dashboard.jsp?highcouncil_name=<c:out value="${highcouncil.highcouncil_name}"/>" style="text-decoration: none;"><h1>CDCMS</h1></a>
         </header>
 
         <nav>
@@ -188,23 +190,24 @@
             <table>
                 <tr>
                     <td>Name</td>
-                    <td><%=((highcouncil) session.getAttribute("hc")).getHighcouncil_name()%></td>
+                    <td><c:out value="${highcouncil.highcouncil_name}"/></td>
+                
                 </tr>
                 <tr>
                     <td>Email</td>
-                    <td><%=((highcouncil) session.getAttribute("hc")).getHighcouncil_email()%></td>
+                    <td><c:out value="${highcouncil.highcouncil_email}"/></td>
                 </tr>
                 <tr>
                     <td>Phone Number</td>
-                    <td><%=((highcouncil) session.getAttribute("hc")).getHighcouncil_phonenum()%></td>
+                    <td><c:out value="${highcouncil.highcouncil_phonenum}"/></td>
                 </tr>
                 <tr>
                     <td>Password</td>
-                    <td><%=((highcouncil) session.getAttribute("hc")).getHighcouncil_password()%></td>
+                    <td><c:out value="${highcouncil.highcouncil_password}"/></td>
                 </tr>
                 <tr>
                     <td>Body Number</td>
-                    <td><%=((highcouncil) session.getAttribute("hc")).getHighcouncil_bodynum()%></td>
+                    <td><c:out value="${highcouncil.highcouncil_bodynum}"/></td>
                 </tr>
                 <tr>
                     <td>
