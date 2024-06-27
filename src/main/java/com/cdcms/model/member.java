@@ -16,6 +16,28 @@ public class member {
     private String member_phonenum;
     private String member_bodynum;
 
+    public member() {
+    }
+
+    public member(int member_id, String member_name, String member_email, String member_password, String member_phonenum, String member_bodynum) {
+        this.member_id = member_id;
+        this.member_name = member_name;
+        this.member_email = member_email;
+        this.member_password = member_password;
+        this.member_phonenum = member_phonenum;
+        this.member_bodynum = member_bodynum;
+    }
+
+    public member(String member_name, String member_email, String member_password, String member_phonenum, String member_bodynum) {
+        this.member_name = member_name;
+        this.member_email = member_email;
+        this.member_password = member_password;
+        this.member_phonenum = member_phonenum;
+        this.member_bodynum = member_bodynum;
+    }
+
+    
+    
     public int getMember_id() {
         return member_id;
     }

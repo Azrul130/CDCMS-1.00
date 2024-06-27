@@ -1,29 +1,22 @@
 <%-- 
-    Document   : activity
-    Created on : 3 Jan 2024, 1:38:07 am
+    Document   : Dashboard
+    Created on : 3 Jan 2024, 12:39:16 am
     Author     : Azrul Hafizam
 --%>
 
-<%@ page import="jakarta.servlet.http.HttpSession" %>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page import="com.cdcms.dao.*" %>
 <%@page import="com.cdcms.model.*" %>
 <%@page import="com.cdcms.controller.*" %>
-<%@page import="java.util.List" %>
-
-
-
+<%@page import="jakarta.servlet.ServletContext" %>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CDCMS</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-
         <style>
 
             html, body {
@@ -41,11 +34,9 @@
 
             }
 
-            h3{
-                background-color: orange;
+            h2{
                 padding: 10px;
-                border:#000;
-                border-radius: 20px;
+                font-size: 30px;
             }
 
             header {
@@ -103,10 +94,17 @@
 
 
             main {
+                background-color: white; 
                 padding: 20px;
+                margin-left: 30px;
+                margin-right:30px;
+                margin-bottom: 150px;
+                margin-top: 50px;
                 box-sizing: border-box;
                 background-size: 200%;
                 background-position:center;
+                border-radius: 30px;
+                height: 30px;
                 padding-bottom: 150px;
 
             }
@@ -156,22 +154,28 @@
                 .btn {
                     background-color: orange;
                 }
+                
+                    #welcome-message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+            color: white;
+            text-shadow: 1px 1px 1px #333;
+        }
 
 
             }
         </style>
     </head>
-
     <body>
         <header>
-            <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
-            <a href="DashboardAdvisor.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
+            <h1>CDCMS</h1>
         </header>
 
         <nav>
             <ul>
-                <li style="background-color:blue; padding-top: 14px; padding-bottom: 14px;">
-                    <a href="<%=request.getContextPath()%>/listact" style="background-color:blue; padding-top: 14px; padding-bottom: 14px;">Activity</a>
+                <li>
+                    <a href="listact">Activity</a>
                 </li>
                 <li><a href="#">Report</a></li>
                 <li><a href="#">Account</a></li>
@@ -180,46 +184,16 @@
         </nav>
 
         <main>
-            <div class="row">
-                <div class="container">
-                    <h3  class="text-center"><strong>List of Activity</strong></h3>
-                    <hr><!-- comment -->
-                    <br><!-- comment -->
-                    <table id="act">
-                        <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Place</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Status</th>
-                            <th>Proposal</th>
-                            <th>Action</th>
-                        </tr>
+        <!-- Welcoming message -->
+        <div id="welcome-message">
+            <h2>Welcome, <c:out value="${advisor.advisor_name}"/>!</h2>
+        </div>
 
-                        <c:forEach var="activity" items="${listAct}">
-                            <tr>
-                                <td>${activity.activity_title}</td>
-                                <td>${activity.activity_description}</td>
-                                <td>${activity.activity_place}</td>
-                                <td>${activity.activity_date}</td>
-                                <td>${activity.activity_time}</td>
-                                <td>${activity.activity_status}</td>
-                                <td><a href="proposal?activity_proposalname=${activity.activity_proposalname}">Download</a></td>
-                                <td>
-                                    <a class="btn btn-success" style=" background-color: orangered;" href="editact2?activity_id=${activity.activity_id}">Update</a><br>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </table>
-                </div>
-            </div>
-        </main>
-
+        <!-- Rest of your content goes here -->
+    </main>
 
         <footer>
             <p>&copy; 2022 CDCMS. All rights reserved.</p>
         </footer>
     </body>
-
 </html>

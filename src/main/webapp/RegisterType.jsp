@@ -114,7 +114,7 @@
         <br>
         <br>
         <div class="type">
-            <button><a href="#"><strong>Member</strong></a></button>
+            <button><a href="MemberRegForm.jsp"><strong>Member</strong></a></button>
             <button><a href="HcRegForm.jsp"><strong>High Council</strong></a></button>
             <button><a href="#"><strong>Advisor</strong></a></button>
         </div>

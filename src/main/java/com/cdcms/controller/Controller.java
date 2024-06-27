@@ -10,6 +10,7 @@ import com.cdcms.dao.AssetDAO;
 import com.cdcms.model.activity;
 import com.cdcms.model.asset;
 import com.cdcms.model.highcouncil;
+import com.cdcms.model.member;
 import java.util.List;
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +76,8 @@ public class Controller extends HttpServlet {
         try {
             switch (action) {
                 //Account Module -----------------------------------------------
+                //Highcouncil***********************************************
+
                 case "/addHC":
                     AddHC(request, response);
                     break;
@@ -89,6 +92,17 @@ public class Controller extends HttpServlet {
                     break;
                 case "/deletehc":
                     deletehc(request, response);
+                    break;
+
+                //Member****************************************************
+                case "/addMember":
+                    addMember(request, response);
+                    break;
+                case "/viewmemberprofile":
+                    viewMemberProfile(request, response);
+                    break;
+                 case "/deletemember":
+                    deleteMember(request, response);
                     break;
 
                 //Activity Module ----------------------------------------------
@@ -139,6 +153,9 @@ public class Controller extends HttpServlet {
                 case "/listAsset":
                     listAsset(request, response);
                     break;
+                case "/listAssetMember":
+                    listAssetMember(request, response);
+                    break;
                 case "/deleteAsset":
                     deleteAsset(request, response);
                     break;
@@ -149,6 +166,7 @@ public class Controller extends HttpServlet {
     }
 
     //Account Module
+    //HIGHCOUNCIL
     protected void AddHC(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         String hcname = request.getParameter("name");
@@ -180,7 +198,7 @@ public class Controller extends HttpServlet {
         request.setAttribute("highcouncil", existinghc);
         dispatcher.forward(request, response);
     }
-    
+
     protected void updatehc(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         highcouncil hc = new highcouncil();
@@ -195,12 +213,42 @@ public class Controller extends HttpServlet {
         response.sendRedirect("viewhcprofile?highcouncil_id=" + hcid);
     }
 
-    
     protected void deletehc(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         int id = Integer.parseInt(request.getParameter("highcouncil_id"));
         dao.deletehc(id);
         int hcid = Integer.parseInt(request.getParameter("highcouncil_id"));
+        response.sendRedirect("LoginPage.jsp");
+    }
+
+    //Member *******************************************************************
+    protected void addMember(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        String Mname = request.getParameter("name");
+        String Memail = request.getParameter("email");
+        String Mpassword = request.getParameter("password");
+        String Mphonenum = request.getParameter("phonenum");
+        String Mbodynum = request.getParameter("bodynum");
+        member mbr = new member(Mname, Memail, Mpassword, Mphonenum, Mbodynum);
+        dao.addMember(mbr);
+        response.sendRedirect("LoginPage.jsp");
+    }
+
+    protected void viewMemberProfile(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        String inputString = request.getParameter("member_id");
+        inputString = inputString.trim(); // Remove leading and trailing whitespaces
+        int mbrid = Integer.parseInt(inputString);
+        member viewmember = dao.selectMember_byId(mbrid);
+        request.setAttribute("member", viewmember);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("profileMember.jsp");
+        dispatcher.forward(request, response);
+    }
+    
+        protected void deleteMember(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int id = Integer.parseInt(request.getParameter("member_id"));
+        dao.deleteMember(id);
         response.sendRedirect("LoginPage.jsp");
     }
 
@@ -465,6 +513,15 @@ public class Controller extends HttpServlet {
         List<asset> listAsset = dao3.viewallAsset();
         session.setAttribute("listAsset", listAsset);
         RequestDispatcher dispatcher = request.getRequestDispatcher("AssetList.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    protected void listAssetMember(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        HttpSession session = request.getSession();
+        List<asset> listAsset = dao3.viewallAsset();
+        session.setAttribute("listAsset", listAsset);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("AssetMember.jsp");
         dispatcher.forward(request, response);
     }
 

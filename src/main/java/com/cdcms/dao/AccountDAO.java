@@ -5,6 +5,7 @@
 package com.cdcms.dao;
 
 import com.cdcms.model.highcouncil;
+import com.cdcms.model.member;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -27,7 +28,7 @@ public class AccountDAO {
     //sql for highcouncil
     private static final String Add_New_HC = "INSERT INTO highcouncil(highcouncil_name, highcouncil_email, highcouncil_password, highcouncil_phonenum, highcouncil_bodynum) values (?,?,?,?,?)";
     private static final String View_All_HC = "SELECT * FROM highcouncil";
-    private static final String View_HC_By_Id = "SELECT highcouncil_name, highcouncil_email, highcouncil_password, highcouncil_phonenum, highcouncil_bodynum WHERE highcouncil_id = ?";
+    private static final String View_HC_By_Id = "SELECT highcouncil_name, highcouncil_email, highcouncil_password, highcouncil_phonenum, highcouncil_bodynum from highcouncil WHERE highcouncil_id = ?";
     private static final String Update_HC = "UPDATE highcouncil SET highcouncil_name=?, highcouncil_email=?, highcouncil_password=?, highcouncil_phonenum=?, highcouncil_bodynum=? WHERE highcouncil_id=?";
     private static final String Delete_HC = "DELETE FROM highcouncil WHERE highcouncil_id=?";
 
@@ -37,6 +38,12 @@ public class AccountDAO {
     private static final String View_Advisor_By_Id = "SELECT * FROM advisor WHERE advisor_id = ?";
     private static final String Edit_Advisor = "UPDATE advisor SET advisor_name=?, advisor_email=?, advisor_password=?, advisor_phonenum=?, advisor_bodynum=? WHERE advisor_id=?";
     private static final String Delete_Advisor = "DELETE FROM advisor WHERE advisor_id=?";
+
+    private static final String Add_New_Member = "INSERT INTO member(member_name, member_email, member_password, member_phonenum, member_bodynum) values (?,?,?,?,?)";
+    private static final String View_All_Member = "SELECT * FROM member";
+    private static final String View_Member_By_Id = "SELECT member_name, member_email, member_password, member_phonenum, member_bodynum from highcouncil WHERE member_id = ?";
+    private static final String Update_Member = "UPDATE member SET member_name=?, member_email=?, member_password=?, member_phonenum=?, member_bodynum=? WHERE member_id=?";
+    private static final String Delete_Member = "DELETE FROM member WHERE member_id=?";
 
     public AccountDAO() {
     }
@@ -52,6 +59,7 @@ public class AccountDAO {
         return con;
     }
 
+//HIGHCOUNCIL******************************************************************
 //add high council
     public void addHC(highcouncil HC) throws SQLException {
         System.out.println(Add_New_HC);
@@ -83,8 +91,8 @@ public class AccountDAO {
         return rowUpdated;
     }
 
-    public highcouncil selectHC_byId(int highcouncil_id) throws SQLException {
-        highcouncil hclist = null;
+    public highcouncil selectHC_byId2(int highcouncil_id) throws SQLException {
+        highcouncil hc = null;
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(View_HC_By_Id);) {
             preparedStatement.setInt(1, highcouncil_id);
             System.out.println(preparedStatement);
@@ -100,7 +108,35 @@ public class AccountDAO {
         } catch (SQLException e) {
             printSQLException(e);
         }
-        return hclist;
+        return hc;
+    }
+
+    public highcouncil selectHC_byId(int highcouncil_id) throws SQLException {
+        highcouncil hc = null;
+        String query = "SELECT highcouncil_name, highcouncil_email, highcouncil_password, highcouncil_phonenum, highcouncil_bodynum FROM highcouncil WHERE highcouncil_id = ?";
+
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, highcouncil_id);
+            System.out.println(preparedStatement);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    String hcname = rs.getString("highcouncil_name");
+                    String hcemail = rs.getString("highcouncil_email");
+                    String hcpassword = rs.getString("highcouncil_password");
+                    String hcphonenum = rs.getString("highcouncil_phonenum");
+                    String hcbodynum = rs.getString("highcouncil_bodynum");
+
+                    hc = new highcouncil(highcouncil_id, hcname, hcemail, hcpassword, hcphonenum, hcbodynum);
+                }
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+            throw e;  // Rethrow the exception after logging
+        }
+
+        return hc;
     }
 
     public boolean deletehc(int highcouncil_id) throws SQLException {
@@ -112,6 +148,69 @@ public class AccountDAO {
         return rowDeleted;
     }
 
+    //MEMBER****************************************************************************
+    public void addMember(member mbr) throws SQLException {
+        System.out.println(Add_New_Member);
+        try {
+            Connection con = AccountDAO.getConnection();
+            PreparedStatement ps = con.prepareStatement(Add_New_Member);
+            ps.setString(1, mbr.getMember_name());
+            ps.setString(2, mbr.getMember_email());
+            ps.setString(3, mbr.getMember_password());
+            ps.setString(4, mbr.getMember_phonenum());
+            ps.setString(5, mbr.getMember_bodynum());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+    }
+
+    public boolean Update_Member(member mbr) throws SQLException {
+        boolean rowUpdated;
+        try (Connection connection = getConnection(); 
+                PreparedStatement statement = connection.prepareStatement(Update_Member);) {
+            statement.setString(1, mbr.getMember_name());
+            statement.setString(2, mbr.getMember_email());
+            statement.setString(3, mbr.getMember_password());
+            statement.setString(4, mbr.getMember_phonenum());
+            statement.setString(5, mbr.getMember_bodynum());
+            statement.setInt(6, mbr.getMember_id());
+            rowUpdated = statement.executeUpdate() > 0;
+        }
+        return rowUpdated;
+    }
+
+    public member selectMember_byId(int member_id) throws SQLException {
+        member mbr = null;
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(View_Member_By_Id);) {
+            preparedStatement.setInt(1, member_id);
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("member_name");
+                String email = rs.getString("member_email");
+                String password = rs.getString("member_password");
+                String phonenum = rs.getString("member_phonenum");
+                String bodynum = rs.getString("member_bodynum");
+                mbr = new member(member_id, name, email, password, phonenum, bodynum);
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return mbr;
+    }
+
+    public boolean deleteMember(int member_id) throws SQLException {
+        boolean rowDeleted;
+        try (Connection connection = getConnection(); 
+                PreparedStatement statement = connection.prepareStatement(Delete_Member);) {
+            statement.setInt(1, member_id);
+            rowDeleted = statement.executeUpdate() > 0;
+        }
+        return rowDeleted;
+    }
+
+    //**************************************************
     private void printSQLException(SQLException ex) {
         for (Throwable e : ex) {
             if (e instanceof SQLException) {
