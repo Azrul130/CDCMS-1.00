@@ -1,6 +1,6 @@
 <%-- 
-    Document   : activity
-    Created on : 3 Jan 2024, 1:38:07 am
+    Document   : MemberUpdateForm
+    Created on : 2 Jan 2024, 11:11:49 pm
     Author     : Azrul Hafizam
 --%>
 
@@ -18,27 +18,15 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Activity Status (Advisor)</title>
+        <title>Update Profile</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
                 background-color:steelblue;
-                
-            }
-
-            body::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
                 background-image: url('LogoSISPA2.png');
                 background-size: 50px;
-                filter: blur(2px);
-                z-index: -1; /* Places the image behind other content */
             }
 
             h1 {
@@ -115,6 +103,8 @@
             input[type="time"],
             input[type="file"],
             input[type="date"],
+            input[type="email"],
+            input[type="password"],
             textarea {
                 width: 100%;
                 padding: 12px 20px;
@@ -168,14 +158,6 @@
             textarea {
                 resize: none;
             }
-
-            .status{
-                display: inline;
-                padding: 15px;
-                margin: 10px;
-            }
-
-
         </style>
     </head>
 
@@ -185,54 +167,54 @@
             <h1>CDCMS</h1>
         </header>
 
+        
         <nav>
             <ul>
-                <li style="background-color:blue; padding-top: 14px; padding-bottom: 14px;">
-                    <a href="<%=request.getContextPath()%>/actlist" style="background-color:blue; padding-top: 14px; padding-bottom: 14px;">Activity</a>
-                </li>
-                <li><a href="#">Report</a></li>
-                <li><a href="#">Account</a></li>
-                <li><a href="LoginPage.jsp">Log out</a></li>
+                <li><a href="#">Activity</a></li>
+                <li><a href="<%=request.getContextPath()%>/listAssetMember">Aset</a></li>
+                <li><a href="<%=request.getContextPath()%>/viewmemberprofile?member_id=<c:out value="${member.member_id}"/>">Account</a></li>
+                       <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>
+        
 
         <main>
 
             <div class="form-container">
-                <form action="updateact2?activity_id=${activity.activity_id}&activity_proposalname=${activity.activity_proposalname}&highcouncil_id=${activity.highcouncil_id}" method="post" enctype="multipart/form-data">
-                    <h1>Activity Status</h1>
-                    <p><strong>Title :      </strong> ${activity.activity_title}</p>
-                    <p><strong>Description :</strong> ${activity.activity_description}</p>
-                    <p><strong>Place :      </strong> ${activity.activity_place}</p>
-                    <p><strong>Date :       </strong>${activity.activity_date}</p>
-                    <p><strong>Time :       </strong>${activity.activity_time}</p>
+                <form action="updatemember?member_id=<c:out value="${member.member_id}"/>" method="POST" enctype="multipart/form-data">
+                    <h1>Update Profile</h1>
+                    <label>Name</label>
+                    <input type="text" name="name" id="name" 
+                           value="<c:out value="${member.member_name}"/>"><!-- comment -->
+                    <br><!-- comment -->
 
+                    <label>Email</label>
+                    <input type="email" name="email" id="email" 
+                           value="<c:out value="${member.member_email}"/>"><!-- comment -->
+                    <br><!-- comment -->
 
-                    <%--
-                    <input type="text" id="title" name="title" value="${activity.activity_title}" readonly="">
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" rows="5" cols="50" maxlength="200" readonly>${activity.activity_description}</textarea>
-                    <label for="place">Place</label>
-                    <input type="text" id="place" name="place" value="${activity.activity_place}" readonly>
-                    <label for="date">Date</label>
-                    <input type="date" id="date" name="date" value="${activity.activity_date}" readonly>
-                    <label for="time">Time</label>
-                    <input type="time" id="time" name="time" value="${activity.activity_time}" readonly>
-                    --%>
-                    <input type="radio" id="app" name="status" value="Approve">
-                    <label for="app">Approve</label>
-                    <input type="radio" id="rej" name="status" value="Reject">
-                    <label for="rej">Reject</label>
-                    <br>
-                    <button type="submit">Submit</button>
+                    <label>Phone Number</label>
+                    <input type="text" name="phonenum" id="phonenum" 
+                           value="<c:out value="${member.member_phonenum}"/>"><!-- comment -->
+                    <br><!-- comment -->
+
+                    <label>Body Number</label>
+                    <input type="text" name="bodynum" id="bodynum" 
+                           value="<c:out value="${member.member_bodynum}"/>"><!-- comment -->
+                    <br><!-- comment -->
+
+                    <label>Password</label>
+                    <input type="password" name="password" id="password" 
+                           value="<c:out value="${member.member_password}"/>"><!-- comment -->
+                    <br><!-- comment -->
+                   <button type="submit">Submit</button>
                 </form>
             </div>
 
         </main>
 
-
         <footer>
-            <p>&copy; 2022 CDCMS. All rights reserved.</p>
+            <p>&copy; 2024 CDCMS. All rights reserved.</p>
         </footer>
     </body>
 

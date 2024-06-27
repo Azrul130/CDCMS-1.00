@@ -101,8 +101,14 @@ public class Controller extends HttpServlet {
                 case "/viewmemberprofile":
                     viewMemberProfile(request, response);
                     break;
-                 case "/deletemember":
+                case "/deletemember":
                     deleteMember(request, response);
+                    break;
+                case "/editmember":
+                    updateMemberForm(request, response);
+                    break;
+                case "/updatemember":
+                    updateMember(request, response);
                     break;
 
                 //Activity Module ----------------------------------------------
@@ -244,12 +250,37 @@ public class Controller extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("profileMember.jsp");
         dispatcher.forward(request, response);
     }
-    
-        protected void deleteMember(HttpServletRequest request, HttpServletResponse response)
+
+
+    protected void deleteMember(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         int id = Integer.parseInt(request.getParameter("member_id"));
         dao.deleteMember(id);
         response.sendRedirect("LoginPage.jsp");
+    }
+    
+        protected void updateMemberForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int member_id = Integer.parseInt(request.getParameter("member_id"));
+        member member = dao.selectMember_byId(member_id);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("MemberUpdateForm.jsp");
+        request.setAttribute("member", member);
+        dispatcher.forward(request, response);
+    }
+
+    protected void updateMember(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        member mbr = new member();
+        int mbrid = Integer.parseInt(request.getParameter("member_id"));
+        mbr.setMember_id(mbrid);
+        mbr.setMember_name(request.getParameter("name"));
+        mbr.setMember_email(request.getParameter("email"));
+        mbr.setMember_password(request.getParameter("password"));
+        mbr.setMember_phonenum(request.getParameter("phonenum"));
+        mbr.setMember_bodynum(request.getParameter("bodynum"));
+        dao.Update_Member(mbr);
+  
+        response.sendRedirect("viewmemberprofile?member_id=" + mbrid);
     }
 
     //Activity Module --------------------------------------------------------------------------------------------------

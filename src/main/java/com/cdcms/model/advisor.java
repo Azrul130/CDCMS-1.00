@@ -15,6 +15,9 @@ public class advisor {
     private String advisor_password;
     private String advisor_phonenum;
 
+    public advisor() {
+    }
+
     public advisor(int advisor_id, String advisor_name, String advisor_email, String advisor_password, String advisor_phonenum) {
         this.advisor_id = advisor_id;
         this.advisor_name = advisor_name;
@@ -29,7 +32,7 @@ public class advisor {
         this.advisor_password = advisor_password;
         this.advisor_phonenum = advisor_phonenum;
     }
-    
+
     public int getAdvisor_id() {
         return advisor_id;
     }

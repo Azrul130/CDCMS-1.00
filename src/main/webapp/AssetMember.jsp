@@ -32,26 +32,33 @@
                 font-family: Arial, sans-serif;
                 display: flex;
                 flex-direction: column;
-                background-color: steelblue;
-                margin: 0;
-                padding: 0;
+                background-color: #FFDC00;
+               <%-- background-image: url('LogoSISPA2.png'); --%>
+                background-size: 50px;
+
             }
 
-            h3 {
+            h3{
                 background-color: orange;
                 padding: 10px;
-                border: #000;
+                border:#000;
                 border-radius: 20px;
             }
 
             header {
-                background-color: lightblue;
+                background-color: #0074D9;
+               <%-- background-image: url('BGHeader2.png'); --%>
                 background-size: 600px;
                 padding: 20px;
                 text-align: left;
                 display: flex;
                 align-items: center;
                 justify-content: left;
+            }
+
+            img {
+                width: 8%;
+                height: 10%;
             }
 
             header h1 {
@@ -185,10 +192,10 @@
 
         <nav>
             <ul>
-                <li><a href="">Activity</a></li>
-                <li style="background-color: blue; padding-top: 14px; padding-bottom: 14px;"><a href="<%=request.getContextPath()%>/listAssetMember">Aset</a></li>
-                <li><a href="">Account</a></li>
-                <li><a href="LoginPage.jsp">Log out</a></li>
+                <li><a href="#">Activity</a></li>
+                <li><a href="<%=request.getContextPath()%>/listAssetMember">Aset</a></li>
+                <li><a href="<%=request.getContextPath()%>/viewmemberprofile?member_id=<c:out value="${member.member_id}"/>">Account</a></li>
+                       <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>
 

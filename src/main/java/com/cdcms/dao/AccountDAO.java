@@ -39,9 +39,10 @@ public class AccountDAO {
     private static final String Edit_Advisor = "UPDATE advisor SET advisor_name=?, advisor_email=?, advisor_password=?, advisor_phonenum=?, advisor_bodynum=? WHERE advisor_id=?";
     private static final String Delete_Advisor = "DELETE FROM advisor WHERE advisor_id=?";
 
+    //sql for Member
     private static final String Add_New_Member = "INSERT INTO member(member_name, member_email, member_password, member_phonenum, member_bodynum) values (?,?,?,?,?)";
     private static final String View_All_Member = "SELECT * FROM member";
-    private static final String View_Member_By_Id = "SELECT member_name, member_email, member_password, member_phonenum, member_bodynum from highcouncil WHERE member_id = ?";
+    private static final String View_Member_By_Id = "SELECT member_name, member_email, member_password, member_phonenum, member_bodynum from member WHERE member_id = ?";
     private static final String Update_Member = "UPDATE member SET member_name=?, member_email=?, member_password=?, member_phonenum=?, member_bodynum=? WHERE member_id=?";
     private static final String Delete_Member = "DELETE FROM member WHERE member_id=?";
 
@@ -192,7 +193,7 @@ public class AccountDAO {
                 String password = rs.getString("member_password");
                 String phonenum = rs.getString("member_phonenum");
                 String bodynum = rs.getString("member_bodynum");
-                mbr = new member(member_id, name, email, password, phonenum, bodynum);
+                mbr = new member(member_id,name, email, password, phonenum, bodynum);
             }
         } catch (SQLException e) {
             printSQLException(e);

@@ -17,7 +17,7 @@
     </head>
     <body>
         <jsp:useBean id="hc" class="com.cdcms.model.highcouncil" scope="session"></jsp:useBean>
-        <jsp:useBean id="advisor" class="com.cdcms.model.Advisor" scope="session"></jsp:useBean>
+        <jsp:useBean id="advisor" class="com.cdcms.model.advisor" scope="session"></jsp:useBean>
         <jsp:useBean id="mbr" class="com.cdcms.model.member" scope="session"></jsp:useBean>
 
 

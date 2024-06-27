@@ -170,7 +170,7 @@
     <body>
         <header>
             <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
-            <a href="DashboardMember.jsp?member_name=<c:out value="${member.member_name}"/>" style="text-decoration: none;"><h1>CDCMS</h1></a>
+            <a href="DashboardMember.jsp?member_id=<c:out value="${member.member_id}"/>" style="text-decoration: none;"><h1>CDCMS</h1></a>
         </header>
 
        <nav>
@@ -210,11 +210,12 @@
                     <td>
                         <a class="btn btn-success" style=" background-color: orangered;" href="editmember?member_id=<c:out value="${member.member_id}"/>">Update</a><br>
                     </td>
+                    <%--
                     <td>
                         <a style="margin-top: 5px;background-color: orangered;" class="btn btn-success" 
                            href="deletemember?member_id=<c:out value="${member.member_id}"/>" 
                            onclick="confirmDelete(event, this.href)">Delete Account</a>
-                    </td>
+                    </td> --%>
                 </tr>
             </table>
         </main>
