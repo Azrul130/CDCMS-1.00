@@ -19,13 +19,30 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CDCMS</title>
         <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
-                background-color:steelblue;
+                background-color: steelblue;
+            }
+
+            body::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
                 background-image: url('LogoSISPA2.png');
                 background-size: 50px;
+                height: 150%;
+                filter: blur(2px);
+                z-index: -1; /* Places the image behind other content */
             }
 
             h1 {
@@ -89,7 +106,7 @@
             }
 
             .form-container {
-                width: 400px;
+                width: 500px;
                 margin: 0 auto;
                 padding: 20px;
                 background-color: #f9f9f9;
@@ -176,9 +193,9 @@
     </head>
 
     <body>
-        <header>
-            <img src="LogoSISPA2.png" alt="CDC">
-            <h1>CDCMS</h1>
+    <header>
+            <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
+            <a href="Dashboard.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
         </header>
 
         <nav>
@@ -186,8 +203,8 @@
                 <li>
                     <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
                 </li>
-                <li><a href="AsetHC.jsp">Aset</a></li>
-                <li><a href="#">Report</a></li>
+                <li><a href="<%=request.getContextPath()%>/listAsset">Aset</a></li>
+                <li><a href="reportactivityHc">Report</a></li>
                 <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>

@@ -1,9 +1,8 @@
 <%-- 
-    Document   : AssetUpdateForm
-    Created on : 22 May 2024, 5:08:27 pm
+    Document   : MemberUpdateForm
+    Created on : 2 Jan 2024, 11:11:49 pm
     Author     : Azrul Hafizam
 --%>
-
 
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -13,25 +12,40 @@
 <%@page import="com.cdcms.controller.*" %>
 <%@page import="jakarta.servlet.ServletContext" %>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Update Asset</title>
+        <title>Update Profile</title>
         <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
-                background-color:steelblue;
-                background-image: url('LogoSISPA2.png');
-                background-size: 50px;
+                background-color: steelblue;
             }
 
-            h2 {
+            body::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 120%;
+                background-image: url('LogoSISPA2.png');
+                background-size: 50px;
+                filter: blur(2px);
+                z-index: -1; /* Places the image behind other content */
+            }
+
+            h1 {
                 text-align: center;
             }
 
@@ -102,10 +116,12 @@
             }
 
             input[type="text"],
-            input[type="number"],
+            input[type="time"],
             input[type="file"],
             input[type="date"],
-            textarea, select {
+            input[type="email"],
+            input[type="password"],
+            textarea {
                 width: 100%;
                 padding: 12px 20px;
                 margin: 8px 0;
@@ -159,49 +175,57 @@
                 resize: none;
             }
         </style>
-
     </head>
 
+    <body>
+    <body>
         <header>
             <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
-            <a href="Dashboard.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
+            <a href="DashboardAdvisor.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
         </header>
 
         <nav>
             <ul>
-                <li>
-                    <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
-                </li>
-                <li><a href="<%=request.getContextPath()%>/listAsset">Aset</a></li>
-                <li><a href="reportactivityHc">Report</a></li>
-                <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
+                <li><a href="<%=request.getContextPath()%>/listact">Activity</a></li>
+                <li><a href="reportactivityAdv">Report</a></li>
+                <li><a href="<%=request.getContextPath()%>/viewADVprofile?advisor_id=<c:out value="${advisor.advisor_id}"/>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>
 
-        <main>
-            <div class="form-container">
 
-                    <form action="updateAsset?asset_id=${asset.asset_id}" method="post" enctype="multipart/form-data">
-                        <h2>New Asset</h2>
-                        <label for="name">Asset Name</label>
-                        <input type="text" id="name" name="name" value="${asset.asset_name}">
-                        <label for="quantity">Quantity</label>
-                        <input type="number" id="quantity" name="quantity" value="${asset.asset_quantity}">
-                        <label for "status">Status</label>
-                        <p>Current : ${asset.asset_status}</p>
-                        <select name="status" id="status">
-                            <option value="Available">Available</option>
-                            <option value="Not Available">Not Available</option>                        
-                        </select><br>
-                                         
-                        <button type="submit">Submit</button>
-                    </form>
+        <main>
+
+            <div class="form-container">
+                <form action="updateAdvisor?advisor_id=<c:out value="${advisor.advisor_id}"/>" method="POST" enctype="multipart/form-data">
+                    <h1>Update Profile</h1>
+                    <label>Name</label>
+                    <input type="text" name="name" id="name" 
+                           value="<c:out value="${advisor.advisor_name}"/>"><!-- comment -->
+                    <br><!-- comment -->
+
+                    <label>Email</label>
+                    <input type="email" name="email" id="email" 
+                           value="<c:out value="${advisor.advisor_email}"/>"><!-- comment -->
+                    <br><!-- comment -->
+
+                    <label>Phone Number</label>
+                    <input type="text" name="phonenum" id="phonenum" 
+                           value="<c:out value="${advisor.advisor_phonenum}"/>"><!-- comment -->
+                    <br><!-- comment -->
+
+                    <label>Password</label>
+                    <input type="password" name="password" id="password" 
+                           value="<c:out value="${advisor.advisor_password}"/>"><!-- comment -->
+                    <br><!-- comment -->
+                    <button type="submit">Submit</button>
+                </form>
             </div>
+
         </main>
 
         <footer>
-            <p>&copy; 2022 CDCMS. All rights reserved.</p>
+            <p>&copy; 2024 CDCMS. All rights reserved.</p>
         </footer>
     </body>
 

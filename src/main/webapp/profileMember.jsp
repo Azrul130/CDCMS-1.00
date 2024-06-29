@@ -29,12 +29,23 @@
             }
             body {
                 font-family: Arial, sans-serif;
-                display: flex;
-                flex-direction: column;
+                margin: 0;
+                padding: 0;
                 background-color:steelblue;
+
+            }
+
+            body::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
                 background-image: url('LogoSISPA2.png');
                 background-size: 50px;
-
+                filter: blur(2px);
+                z-index: -1; /* Places the image behind other content */
             }
 
             h3{
@@ -173,22 +184,27 @@
             <a href="DashboardMember.jsp?member_id=<c:out value="${member.member_id}"/>" style="text-decoration: none;"><h1>CDCMS</h1></a>
         </header>
 
-       <nav>
+        <nav>
             <ul>
-                <li><a href="#">Activity</a></li>
-                <li><a href="<%=request.getContextPath()%>/listAssetMember">Aset</a></li>
+                <li><a href="listActMember">Activity</a></li>
+                <li><a href="<%=request.getContextPath()%>/listAssetMember?member_id=<c:out value="${member.member_id}"/>">Aset</a></li>
                 <li><a href="<%=request.getContextPath()%>/viewmemberprofile?member_id=<c:out value="${member.member_id}"/>">Account</a></li>
-                       <li><a href="LoginPage.jsp">Log out</a></li>
+                <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>
 
-        <main style="background-color: white">
-
+        <main style="background-color: white;
+              padding-left: 30px; padding-right: 30px;
+              padding-top: 30px; padding-bottom: 50px;
+              margin-left: 150px; margin-right: 150px;
+              margin-bottom: 40px; margin-top: 10px;
+              border-radius: 40px">
+            <strong>Profile Information</strong><br>
             <table>
                 <tr>
                     <td>Name</td>
                     <td><c:out value="${member.member_name}"/></td>
-                
+
                 </tr>
                 <tr>
                     <td>Email</td>
@@ -206,11 +222,12 @@
                     <td>Body Number</td>
                     <td><c:out value="${member.member_bodynum}"/></td>
                 </tr>
-                <tr>
+                <br>
+                <tr><%--
                     <td>
                         <a class="btn btn-success" style=" background-color: orangered;" href="editmember?member_id=<c:out value="${member.member_id}"/>">Update</a><br>
                     </td>
-                    <%--
+                    
                     <td>
                         <a style="margin-top: 5px;background-color: orangered;" class="btn btn-success" 
                            href="deletemember?member_id=<c:out value="${member.member_id}"/>" 
@@ -218,6 +235,9 @@
                     </td> --%>
                 </tr>
             </table>
+                <br>
+            <a class="btn btn-success" style=" background-color: orangered;" href="editmember?member_id=<c:out value="${member.member_id}"/>">Update</a><br>
+
         </main>
 
         <script type="text/javascript">

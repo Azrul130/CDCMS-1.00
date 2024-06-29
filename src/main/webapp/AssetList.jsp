@@ -21,26 +21,36 @@
 
         <style>
 
-            html, body {
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
-            body {
-                font-family: Arial, sans-serif;
-                display: flex;
-                flex-direction: column;
-                background-color:steelblue;
-                background-image: url('LogoSISPA2.png');
-                background-size: 50px;
+html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: steelblue;
+        }
 
-            }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 220%;
+            background-image: url('LogoSISPA2.png');
+            background-size: 50px;
+            filter: blur(2px);
+            z-index: -1; /* Places the image behind other content */
+        }
 
             h3{
                 background-color: orange;
                 padding: 10px;
                 border:#000;
-                border-radius: 20px;
+                border-radius: 10px;
             }
 
             header {
@@ -116,7 +126,6 @@
 
             table{
                 width: 100%;
-                max-width: 100%
             }
 
             #act td, #act th {
@@ -151,6 +160,8 @@
                 .btn {
                     background-color: orange;
                 }
+                
+            
             }
         </style>
         <script>
@@ -176,7 +187,7 @@
                     <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
                 </li>
                 <li><a href="<%=request.getContextPath()%>/listAsset">Aset</a></li>
-                <li><a href="#">Report</a></li>
+                <li><a href="reportactivityHc">Report</a></li>
                 <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
@@ -191,7 +202,8 @@
                     <h3  class="text-center"><strong>List of Asset</strong></h3>
                     <hr><!-- comment -->
                     <div class="container text-left">
-                        <a href="<%=request.getContextPath()%>/newAsset" class="btn btn-success" style=" background-color: orangered;">Add New Asset</a> 
+                        <a href="<%=request.getContextPath()%>/newAsset" class="btn btn-success" style=" background-color: navy;">Add New Asset</a> 
+                        <a href="<%=request.getContextPath()%>/allApplication" class="btn btn-success" style=" background-color: navy;">Application List</a> 
                     </div>
                     <br><!-- comment -->
                     <table id="act">
@@ -211,10 +223,10 @@
                                     <td><c:out value="${asset.asset_quantity}" /></td>
                                     <td><c:out value="${asset.asset_status}" /></td>
 
-                                    <td>
+                                    <td style="padding-right:0;">
                                         <c:set var="base64Picture" value="${asset.getAsset_photoBase64()}"/>
                                         <c:if test="${not empty base64Picture}">
-                                            <img src="data:image/png;base64,${base64Picture}" width="100" height="100" />
+                                            <img src="data:image/png;base64,${base64Picture}" width="150" height="150" />
                                         </c:if>
                                     </td>
 

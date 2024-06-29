@@ -5,6 +5,7 @@
 package com.cdcms.dao;
 
 import com.cdcms.model.asset;
+import com.cdcms.model.assetborrower;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -32,6 +33,13 @@ public class AssetDAO {
     private static final String select_all_asset = "select * from asset";
     private static final String delete_asset = "delete from asset where asset_id=?";
     private static final String update_asset = "update asset set asset_name=?, asset_quantity=?, asset_status=? where asset_id=?";
+
+    private static final String add_borrow = "insert into assetborrower (asset_name, status, quantity, asset_id, member_id, member_name) values (?, ?, ?, ?, ?, ?)";
+    private static final String select_assetborrow_by_memberid = "select assetborrower_id, asset_name, status, quantity, asset_id, member_name from assetborrower where member_id =?";
+    private static final String select_assetborrow_by_assetborrowerid = "select asset_name, status, quantity, asset_id, member_id, member_name from assetborrower where assetborrower_id =?";
+    private static final String delete_assetborrow = "delete from assetborrower where assetborrower_id=?";
+    private static final String select_all_application = "select * from assetborrower";
+    private static final String update_borrowstatus = "update assetborrower set status=? where assetborrower_id=?";
 
     protected Connection getConnection() {
         Connection connection = null;
@@ -61,6 +69,22 @@ public class AssetDAO {
 
     }
 
+    public void add_Assetborrow(assetborrower ast) throws SQLException {
+
+        try (Connection connection = getConnection(); PreparedStatement ps = connection.prepareStatement(add_borrow)) {
+            ps.setString(1, ast.getAsset_name());
+            ps.setString(2, ast.getStatus());
+            ps.setInt(3, ast.getQuantity());
+            ps.setInt(4, ast.getAsset_id());
+            ps.setInt(5, ast.getMember_id());
+            ps.setString(6, ast.getMember_name());
+            System.out.println(ps);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+    }
+
     public List<asset> viewallAsset() {
         List<asset> ast = new ArrayList<>();
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(select_all_asset);) {
@@ -73,6 +97,27 @@ public class AssetDAO {
                 String status = rs.getString("asset_status");
                 byte[] photo = rs.getBytes("asset_photo");
                 ast.add(new asset(id, name, quantity, status, photo));
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return ast;
+    }
+
+    public List<assetborrower> viewallApplication() {
+        List<assetborrower> ast = new ArrayList<>();
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(select_all_application);) {
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int astBorrow = rs.getInt("assetborrower_id");
+                String name = rs.getString("asset_name");
+                String status = rs.getString("status");
+                int quantity = rs.getInt("quantity");
+                int astid = rs.getInt("asset_id");
+                int mbrid = rs.getInt("member_id");
+                String mbrname = rs.getString("member_name");
+                ast.add(new assetborrower(astBorrow, name, status, quantity, astid, mbrid, mbrname));
             }
         } catch (SQLException e) {
             printSQLException(e);
@@ -100,6 +145,54 @@ public class AssetDAO {
         return ast;
     }
 
+    public List<assetborrower> viewallAssetMember(int member_id) {
+        List<assetborrower> ast = new ArrayList<>();
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement
+                = connection.prepareStatement(select_assetborrow_by_memberid);) {
+            preparedStatement.setInt(1, member_id);
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                int astBorrow = rs.getInt("assetborrower_id");
+                String name = rs.getString("asset_name");
+                String status = rs.getString("status");
+                int quantity = rs.getInt("quantity");
+                int astid = rs.getInt("asset_id");
+                String mbrname = rs.getString("member_name");
+                ast.add(new assetborrower(astBorrow, name, status, quantity, astid, member_id, mbrname));
+
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return ast;
+    }
+
+    public assetborrower viewAssetApplication_byID(int assetborrower_id) {
+        assetborrower ast = null;
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement
+                = connection.prepareStatement(select_assetborrow_by_assetborrowerid);) {
+            preparedStatement.setInt(1, assetborrower_id);
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                String name = rs.getString("asset_name");
+                String status = rs.getString("status");
+                int quantity = rs.getInt("quantity");
+                int astid = rs.getInt("asset_id");
+                int mbrid = rs.getInt("member_id");
+                String mbrname = rs.getString("member_name");
+                ast = new assetborrower(assetborrower_id, name, status, quantity, astid, mbrid, mbrname);
+
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return ast;
+    }
+
     public boolean updateAsset(asset ast) throws SQLException {
         boolean rowUpdated;
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(update_asset);) {
@@ -112,9 +205,27 @@ public class AssetDAO {
         return rowUpdated;
     }
 
+    public boolean updateApplication(assetborrower ast) throws SQLException {
+        boolean rowUpdated;
+        try (Connection connection = getConnection(); 
+                PreparedStatement statement = connection.prepareStatement(update_borrowstatus);) {
+            statement.setString(1, ast.getStatus());
+            statement.setInt(2, ast.getAssetborrower_id());
+            rowUpdated = statement.executeUpdate() > 0;
+        }
+        return rowUpdated;
+    }
+
     public void deleteAsset(int asset_id) throws SQLException {
         try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(delete_asset)) {
             ps.setInt(1, asset_id);
+            ps.executeUpdate();
+        }
+    }
+
+    public void deleteAssetBorrow(int assetborrower_id) throws SQLException {
+        try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(delete_assetborrow)) {
+            ps.setInt(1, assetborrower_id);
             ps.executeUpdate();
         }
     }

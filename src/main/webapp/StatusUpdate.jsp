@@ -25,7 +25,7 @@
                 margin: 0;
                 padding: 0;
                 background-color:steelblue;
-                
+
             }
 
             body::before {
@@ -181,17 +181,15 @@
 
     <body>
         <header>
-            <img src="LogoSISPA2.png" alt="CDC">
-            <h1>CDCMS</h1>
+            <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
+            <a href="DashboardAdvisor.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
         </header>
 
         <nav>
             <ul>
-                <li style="background-color:blue; padding-top: 14px; padding-bottom: 14px;">
-                    <a href="<%=request.getContextPath()%>/actlist" style="background-color:blue; padding-top: 14px; padding-bottom: 14px;">Activity</a>
-                </li>
-                <li><a href="#">Report</a></li>
-                <li><a href="#">Account</a></li>
+                <li><a href="<%=request.getContextPath()%>/listact">Activity</a></li>
+                <li><a href="reportactivityAdv">Report</a></li>
+                <li><a href="<%=request.getContextPath()%>/viewADVprofile?advisor_id=<c:out value="${advisor.advisor_id}"/>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>

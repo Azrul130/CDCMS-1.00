@@ -4,6 +4,7 @@
  */
 package com.cdcms.dao;
 
+import com.cdcms.model.advisor;
 import com.cdcms.model.highcouncil;
 import com.cdcms.model.member;
 import java.sql.Connection;
@@ -35,8 +36,8 @@ public class AccountDAO {
     //sql for advisor
     private static final String Add_New_Advisor = "INSERT INTO advisor(advisor_name, advisor_email, advisor_password, advisor_phonenum, advisor_bodynum) values (?,?,?,?,?)";
     private static final String View_All_Advisor = "SELECT * FROM advisor";
-    private static final String View_Advisor_By_Id = "SELECT * FROM advisor WHERE advisor_id = ?";
-    private static final String Edit_Advisor = "UPDATE advisor SET advisor_name=?, advisor_email=?, advisor_password=?, advisor_phonenum=?, advisor_bodynum=? WHERE advisor_id=?";
+    private static final String View_Advisor_By_Id = "SELECT advisor_name, advisor_email, advisor_password, advisor_phonenum FROM advisor WHERE advisor_id = ?";
+    private static final String Update_Advisor = "UPDATE advisor SET advisor_name=?, advisor_email=?, advisor_password=?, advisor_phonenum=? WHERE advisor_id=?";
     private static final String Delete_Advisor = "DELETE FROM advisor WHERE advisor_id=?";
 
     //sql for Member
@@ -168,8 +169,7 @@ public class AccountDAO {
 
     public boolean Update_Member(member mbr) throws SQLException {
         boolean rowUpdated;
-        try (Connection connection = getConnection(); 
-                PreparedStatement statement = connection.prepareStatement(Update_Member);) {
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(Update_Member);) {
             statement.setString(1, mbr.getMember_name());
             statement.setString(2, mbr.getMember_email());
             statement.setString(3, mbr.getMember_password());
@@ -193,7 +193,7 @@ public class AccountDAO {
                 String password = rs.getString("member_password");
                 String phonenum = rs.getString("member_phonenum");
                 String bodynum = rs.getString("member_bodynum");
-                mbr = new member(member_id,name, email, password, phonenum, bodynum);
+                mbr = new member(member_id, name, email, password, phonenum, bodynum);
             }
         } catch (SQLException e) {
             printSQLException(e);
@@ -203,9 +203,67 @@ public class AccountDAO {
 
     public boolean deleteMember(int member_id) throws SQLException {
         boolean rowDeleted;
-        try (Connection connection = getConnection(); 
-                PreparedStatement statement = connection.prepareStatement(Delete_Member);) {
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(Delete_Member);) {
             statement.setInt(1, member_id);
+            rowDeleted = statement.executeUpdate() > 0;
+        }
+        return rowDeleted;
+    }
+
+    //MEMBER****************************************************************************
+    public void addADV(member mbr) throws SQLException {
+        System.out.println(Add_New_Member);
+        try {
+            Connection con = AccountDAO.getConnection();
+            PreparedStatement ps = con.prepareStatement(Add_New_Member);
+            ps.setString(1, mbr.getMember_name());
+            ps.setString(2, mbr.getMember_email());
+            ps.setString(3, mbr.getMember_password());
+            ps.setString(4, mbr.getMember_phonenum());
+            ps.setString(5, mbr.getMember_bodynum());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+    }
+
+    public boolean Update_ADV(advisor mbr) throws SQLException {
+        boolean rowUpdated;
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(Update_Advisor);) {
+            statement.setString(1, mbr.getAdvisor_name());
+            statement.setString(2, mbr.getAdvisor_email());
+            statement.setString(3, mbr.getAdvisor_password());
+            statement.setString(4, mbr.getAdvisor_phonenum());
+            statement.setInt(5, mbr.getAdvisor_id());
+            rowUpdated = statement.executeUpdate() > 0;
+        }
+        return rowUpdated;
+    }
+
+    public advisor selectADV_byId(int advisor_id) throws SQLException {
+        advisor adv = null;
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(View_Advisor_By_Id);) {
+            preparedStatement.setInt(1, advisor_id);
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("advisor_name");
+                String email = rs.getString("advisor_email");
+                String password = rs.getString("advisor_password");
+                String phonenum = rs.getString("advisor_phonenum");
+                adv = new advisor(advisor_id, name, email, password, phonenum);
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return adv;
+    }
+
+    public boolean deleteADV(int advisor_id) throws SQLException {
+        boolean rowDeleted;
+        try (Connection connection = getConnection(); 
+                PreparedStatement statement = connection.prepareStatement(Delete_Advisor);) {
+            statement.setInt(1, advisor_id);
             rowDeleted = statement.executeUpdate() > 0;
         }
         return rowDeleted;

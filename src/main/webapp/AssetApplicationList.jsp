@@ -1,28 +1,28 @@
 <%-- 
-    Document   : activity
-    Created on : 3 Jan 2024, 1:38:07 am
+    Document   : AssetList
+    Created on : 26 May 2024, 5:34:17 pm
     Author     : Azrul Hafizam
 --%>
 
-<%@ page import="jakarta.servlet.http.HttpSession" %>
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.cdcms.model.highcouncil" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page import="com.cdcms.dao.*" %>
 <%@page import="com.cdcms.model.*" %>
 <%@page import="com.cdcms.controller.*" %>
 <%@page import="java.util.List" %>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CDCMS</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 
         <style>
 
@@ -30,10 +30,12 @@
                 height: 100%;
                 margin: 0;
                 padding: 0;
+
             }
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
+
                 padding: 0;
                 background-color: steelblue;
             }
@@ -44,7 +46,7 @@
                 top: 0;
                 left: 0;
                 width: 100%;
-                height: 150%;
+                height: 100%;
                 background-image: url('LogoSISPA2.png');
                 background-size: 50px;
                 filter: blur(2px);
@@ -55,14 +57,16 @@
                 background-color: orange;
                 padding: 10px;
                 border:#000;
-                border-radius: 20px;
+                border-radius: 10px;
             }
 
             header {
-                background-color: lightblue;
+                background-color: lightblue;                
                 background-image: url('BGHeader2.png');
+                margin: 0;
                 background-size: 600px;
                 padding: 20px;
+
                 text-align: left;
                 display: flex;
                 align-items: center;
@@ -131,11 +135,13 @@
 
             table{
                 width: 100%;
-                max-width: 100%
+                max-width: 100%;
+
             }
 
             #act td, #act th {
                 padding: 8px;
+                padding-left: 40px;
                 border-bottom: 1px solid #000;
             }
 
@@ -166,67 +172,75 @@
                 .btn {
                     background-color: orange;
                 }
-
-
             }
         </style>
+        <script>
+            function logout() {
+                // Clear history and redirect to login page
+                window.location.replace('LoginPage.jsp');
+                window.history.replaceState(null, null, 'LoginPage.jsp');
+            }
+        </script>
     </head>
-
     <body>
         <header>
             <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
-            <a href="DashboardAdvisor.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
+            <a href="Dashboard.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
         </header>
 
         <nav>
             <ul>
-                <li><a href="<%=request.getContextPath()%>/listact">Activity</a></li>
-                <li><a href="reportactivityAdv">Report</a></li>
-                <li><a href="#">Account</a></li>
-                <li><a href="LoginPage.jsp">Log out</a></li>
-            </ul>
+                <li>
+                    <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
+                </li>
+                <li><a href="<%=request.getContextPath()%>/listAsset">Aset</a></li>
+                <li><a href="#">Report</a></li>
+                <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
+                <li><a id="logoutButton" href="javascript:logout()">Log out</a></li>
+S            </ul>
         </nav>
 
         <main>
             <div class="row">
                 <div class="container">
-                    <h3  class="text-center"><strong>List of Activity</strong></h3>
+                    <h3  class="text-center"><strong>Asset Application</strong></h3>
                     <hr><!-- comment -->
+                    <div class="container text-left">
+                        <a href="<%=request.getContextPath()%>/listAsset" class="btn btn-success" style=" background-color: navy;">List Asset</a> 
+                    </div>
+                    <br><!-- comment -->
                     <table id="act">
-                        <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Place</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Status</th>
-                            <th>Proposal</th>
-                            <th>Action</th>
-                        </tr>
-
-                        <c:forEach var="activity" items="${listAct}">
+                        <thead>
                             <tr>
-                                <td>${activity.activity_title}</td>
-                                <td>${activity.activity_description}</td>
-                                <td>${activity.activity_place}</td>
-                                <td>${activity.activity_date}</td>
-                                <td>${activity.activity_time}</td>
-                                <td>${activity.activity_status}</td>
-                                <td><a class="btn btn-success" style=" background-color: blueviolet;" href="proposal?activity_proposalname=${activity.activity_proposalname}">Download</a></td>
-                                <td>
-                                    <a class="btn btn-success" style=" background-color: orangered;" href="editact2?activity_id=${activity.activity_id}">Update</a><br>
-                                </td>
+                                <th>Applicant</th>
+                                <th>Asset Name</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
-                        </c:forEach>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="assetborrower" items="${allApplication}">
+                                <tr>
+                                    <td><c:out value="${assetborrower.member_name}" /></td>
+                                    <td><c:out value="${assetborrower.asset_name}" /></td>
+                                    <td><c:out value="${assetborrower.quantity}" /></td>
+                                    <td><c:out value="${assetborrower.status}" /></td>
+
+                                    <td>
+                                        <a class="btn btn-success" style=" background-color: orangered;" 
+                                           href="applicationStatus?assetborrower_id=<c:out value="${assetborrower.assetborrower_id}" />">Update</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
                     </table>
                 </div>
             </div>
         </main>
 
-
         <footer>
-            <p>&copy; 2024 CDCMS. All rights reserved.</p>
+            <p>&copy; 2022 CDCMS. All rights reserved.</p>
         </footer>
     </body>
-
 </html>

@@ -187,7 +187,7 @@
                     <input type="password" name="password2" id="password2" placeholder="Confirm your password" required><!-- comment -->
                     <br><!-- comment -->
                     
-                    <button type="submit">Save</button>
+                    <button type="submit">Submit</button>
                     <button type="reset">Cancel</button>
                 </form>
             </div>
@@ -195,10 +195,18 @@
         <footer>
             <p>&copy; 2023 CDCMS. All rights reserved.</p>
         </footer>
-        <script>
+       <script>
         function validateForm() {
+            var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
             var confirmPassword = document.getElementById("password2").value;
+
+            // Check if email is in lowercase and ends with .com
+            var emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+            if (email !== email.toLowerCase() || !email.endsWith(".com") || !emailPattern.test(email)) {
+                alert("Please enter a valid email address in lowercase and ending with .com");
+                return false; // Prevent form submission
+            }
 
             if (password !== confirmPassword) {
                 alert("Passwords do not match!");

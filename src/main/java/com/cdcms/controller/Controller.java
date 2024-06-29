@@ -8,7 +8,9 @@ import com.cdcms.dao.ActivityDAO;
 import com.cdcms.dao.AccountDAO;
 import com.cdcms.dao.AssetDAO;
 import com.cdcms.model.activity;
+import com.cdcms.model.advisor;
 import com.cdcms.model.asset;
+import com.cdcms.model.assetborrower;
 import com.cdcms.model.highcouncil;
 import com.cdcms.model.member;
 import java.util.List;
@@ -111,6 +113,20 @@ public class Controller extends HttpServlet {
                     updateMember(request, response);
                     break;
 
+                //Advisor----------------------------------------
+                case "/viewADVprofile":
+                    viewAdvisorProfile(request, response);
+                    break;
+                case "/deleteAdvisor":
+                    deleteAdvisor(request, response);
+                    break;
+                case "/editAdvisor":
+                    updateAdvisorForm(request, response);
+                    break;
+                case "/updateAdvisor":
+                    updateAdvisor(request, response);
+                    break;
+
                 //Activity Module ----------------------------------------------
                 case "/newact":
                     showNewFormAct(request, response);
@@ -139,6 +155,9 @@ public class Controller extends HttpServlet {
                 case "/listacthc":
                     listActHc(request, response);
                     break;
+                case "/listActMember":
+                    listAct_MemberView(request, response);
+                    break;
                 default:
                     listAct(request, response);
                     break;
@@ -164,6 +183,39 @@ public class Controller extends HttpServlet {
                     break;
                 case "/deleteAsset":
                     deleteAsset(request, response);
+                    break;
+
+                case "/addborrow":
+                    addBorrowAsset(request, response);
+                    break;
+                case "/borrowform":
+                    showBorrowForm(request, response);
+                    break;
+                case "/listAssetBorrowerMember":
+                    listAssetBorrowerMember(request, response);
+                    break;
+                case "/allApplication":
+                    listApplication(request, response);
+                    break;
+                case "/deleteAssetApplication":
+                    deleteAssetApplication(request, response);
+                    break;
+                case "/applicationStatus":
+                    Application_byID(request, response);
+                    break;
+                case "/applicationStatus_Update":
+                    ApplicationStatusUpdate(request, response);
+                    break;
+
+                //Report Module-------------------------------------------------
+                case "/reportactivityAdv":
+                    report_activityAdv(request, response);
+                    break;
+                case "/reportactivityHc":
+                    report_activityHc(request, response);
+                    break;
+                case "/reportassetHc":
+                    report_assetHc(request, response);
                     break;
             }
         } catch (SQLException ex) {
@@ -251,15 +303,14 @@ public class Controller extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-
     protected void deleteMember(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         int id = Integer.parseInt(request.getParameter("member_id"));
         dao.deleteMember(id);
         response.sendRedirect("LoginPage.jsp");
     }
-    
-        protected void updateMemberForm(HttpServletRequest request, HttpServletResponse response)
+
+    protected void updateMemberForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         int member_id = Integer.parseInt(request.getParameter("member_id"));
         member member = dao.selectMember_byId(member_id);
@@ -279,8 +330,61 @@ public class Controller extends HttpServlet {
         mbr.setMember_phonenum(request.getParameter("phonenum"));
         mbr.setMember_bodynum(request.getParameter("bodynum"));
         dao.Update_Member(mbr);
-  
+
         response.sendRedirect("viewmemberprofile?member_id=" + mbrid);
+    }
+
+    //Member *******************************************************************
+    protected void addAdvisor(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        String Mname = request.getParameter("name");
+        String Memail = request.getParameter("email");
+        String Mpassword = request.getParameter("password");
+        String Mphonenum = request.getParameter("phonenum");
+        String Mbodynum = request.getParameter("bodynum");
+        member mbr = new member(Mname, Memail, Mpassword, Mphonenum, Mbodynum);
+        dao.addMember(mbr);
+        response.sendRedirect("LoginPage.jsp");
+    }
+
+    protected void viewAdvisorProfile(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        String inputString = request.getParameter("advisor_id");
+        inputString = inputString.trim(); // Remove leading and trailing whitespaces
+        int advid = Integer.parseInt(inputString);
+        advisor viewadv = dao.selectADV_byId(advid);
+        request.setAttribute("advisor", viewadv);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("profileAdvisor.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    protected void deleteAdvisor(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int id = Integer.parseInt(request.getParameter("advisor_id"));
+        dao.deleteADV(id);
+        response.sendRedirect("LoginPage.jsp");
+    }
+
+    protected void updateAdvisorForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int advisor_id = Integer.parseInt(request.getParameter("advisor_id"));
+        advisor adv = dao.selectADV_byId(advisor_id);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("AdvisorUpdateForm.jsp");
+        request.setAttribute("advisor", adv);
+        dispatcher.forward(request, response);
+    }
+
+    protected void updateAdvisor(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        advisor adv = new advisor();
+        int advisor_id = Integer.parseInt(request.getParameter("advisor_id"));
+        adv.setAdvisor_id(advisor_id);
+        adv.setAdvisor_name(request.getParameter("name"));
+        adv.setAdvisor_email(request.getParameter("email"));
+        adv.setAdvisor_password(request.getParameter("password"));
+        adv.setAdvisor_phonenum(request.getParameter("phonenum"));
+        dao.Update_ADV(adv);
+        response.sendRedirect("viewADVprofile?advisor_id=" + advisor_id);
     }
 
     //Activity Module --------------------------------------------------------------------------------------------------
@@ -289,6 +393,14 @@ public class Controller extends HttpServlet {
         List<activity> listAct = dao2.selectAllActivity();
         request.setAttribute("listAct", listAct);
         RequestDispatcher dispatcher = request.getRequestDispatcher("ActivityAdvisor.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    protected void listAct_MemberView(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        List<activity> listAct = dao2.selectAllActivity();
+        request.setAttribute("listAct", listAct);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("ActivityMember.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -549,10 +661,11 @@ public class Controller extends HttpServlet {
 
     protected void listAssetMember(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
+        int member_id = Integer.parseInt(request.getParameter("member_id"));
         HttpSession session = request.getSession();
         List<asset> listAsset = dao3.viewallAsset();
         session.setAttribute("listAsset", listAsset);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("AssetMember.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("AssetMember.jsp?member_id=" + member_id);
         dispatcher.forward(request, response);
     }
 
@@ -574,5 +687,119 @@ public class Controller extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("asset_id"));
         dao3.deleteAsset(id);
         response.sendRedirect("listAsset");
+    }
+
+    //Borrow asset
+    protected void showBorrowForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int member_id = Integer.parseInt(request.getParameter("member_id"));
+        int astid = Integer.parseInt(request.getParameter("asset_id"));
+        asset existingAst = dao3.viewallAsset_byID(astid);
+        member existingMember = dao.selectMember_byId(member_id);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("BorrowForm.jsp");
+        request.setAttribute("asset", existingAst);
+        request.setAttribute("member", existingMember);
+        dispatcher.forward(request, response);
+    }
+
+    public void addBorrowAsset(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        int ast_id = Integer.parseInt(request.getParameter("asset_id"));
+        int mbr_id = Integer.parseInt(request.getParameter("member_id"));
+        String ast_name = request.getParameter("asset_name");
+        String mbr_name = request.getParameter("member_name");
+
+        assetborrower ast = new assetborrower();
+        ast.setAsset_name(ast_name);
+        ast.setStatus("Pending");
+        ast.setQuantity(Integer.parseInt(request.getParameter("quantity")));
+        ast.setAsset_id(ast_id);
+        ast.setMember_id(mbr_id);
+        ast.setMember_name(mbr_name);
+        dao3.add_Assetborrow(ast);
+        RequestDispatcher rd = request.getRequestDispatcher("listAssetMember?member_id=" + mbr_id);
+        rd.forward(request, response);
+    }
+
+    protected void listAssetBorrowerMember(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        String inputString = request.getParameter("member_id");
+        if (inputString != null) {
+            inputString = inputString.trim(); // Remove leading and trailing whitespaces
+            int mbrid = Integer.parseInt(inputString);
+            List<assetborrower> listAstBorrow = dao3.viewallAssetMember(mbrid);
+            request.setAttribute("listAssetBorrowerMember", listAstBorrow);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("AssetApplication.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            int mbrid = Integer.parseInt(inputString);
+            List<assetborrower> listAstBorrow = dao3.viewallAssetMember(mbrid);
+            request.setAttribute("listAssetBorrowerMember", listAstBorrow);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("AssetApplication.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
+
+    protected void listApplication(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        HttpSession session = request.getSession();
+        List<assetborrower> allApplication = dao3.viewallApplication();
+        session.setAttribute("allApplication", allApplication);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("AssetApplicationList.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    protected void Application_byID(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int assetborrower_id = Integer.parseInt(request.getParameter("assetborrower_id"));
+        assetborrower existingAst = dao3.viewAssetApplication_byID(assetborrower_id);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("applicationStatus.jsp");
+        request.setAttribute("assetborrower", existingAst);
+        dispatcher.forward(request, response);
+    }
+
+    protected void ApplicationStatusUpdate(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        assetborrower ast = new assetborrower();
+        int astid = Integer.parseInt(request.getParameter("assetborrower_id"));
+        int mbrid = Integer.parseInt(request.getParameter("member_id"));
+        ast.setStatus(request.getParameter("status"));
+        ast.setAssetborrower_id(astid);
+        dao3.updateApplication(ast);
+        RequestDispatcher rd = request.getRequestDispatcher("allApplication");
+        rd.forward(request, response);
+    }
+
+    protected void deleteAssetApplication(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        int mbrid = Integer.parseInt(request.getParameter("member_id"));
+        int id = Integer.parseInt(request.getParameter("assetborrower_id"));
+        dao3.deleteAssetBorrow(id);
+        response.sendRedirect("listAssetBorrowerMember?member_id=" + mbrid);
+    }
+
+    //Report Module
+    protected void report_activityHc(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        List<activity> listAct = dao2.selectAllActivity();
+        request.setAttribute("listAct", listAct);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("ReportActivityHc.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    protected void report_assetHc(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        HttpSession session = request.getSession();
+        List<assetborrower> allApplication = dao3.viewallApplication();
+        session.setAttribute("allApplication", allApplication);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("ReportAssetHc.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    protected void report_activityAdv(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        List<activity> listAct = dao2.selectAllActivity();
+        request.setAttribute("listAct", listAct);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("ReportActivityAdvisor.jsp");
+        dispatcher.forward(request, response);
     }
 }

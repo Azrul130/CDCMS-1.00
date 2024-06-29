@@ -29,12 +29,22 @@
             }
             body {
                 font-family: Arial, sans-serif;
-                display: flex;
-                flex-direction: column;
-                background-color:steelblue;
+                margin: 0;
+                padding: 0;
+                background-color: steelblue;
+            }
+
+            body::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
                 background-image: url('LogoSISPA2.png');
                 background-size: 50px;
-
+                filter: blur(2px);
+                z-index: -1; /* Places the image behind other content */
             }
 
             h3{
@@ -111,8 +121,11 @@
                 background-color: darkslategray;
                 color: white;
                 padding: 10px;
-                padding-bottom: 100px;
+                padding-top: 60px;
+                padding-bottom: 67px;
                 text-align: center;
+                margin-top: 20px;
+
             }
 
             table{
@@ -170,56 +183,48 @@
     <body>
         <header>
             <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
-            <a href="Dashboard.jsp?highcouncil_name=<c:out value="${highcouncil.highcouncil_name}"/>" style="text-decoration: none;"><h1>CDCMS</h1></a>
+            <a href="DashboardAdvisor.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
         </header>
 
         <nav>
             <ul>
-                <li>
-                    <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
-                </li>
-                <li><a href="<%=request.getContextPath()%>/listAsset">Aset</a></li>
-                <li><a href="#">Report</a></li>
-                <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
+                <li><a href="<%=request.getContextPath()%>/listact">Activity</a></li>
+                <li><a href="reportactivityAdv">Report</a></li>
+                <li><a href="<%=request.getContextPath()%>/viewADVprofile?advisor_id=<c:out value="${advisor.advisor_id}"/>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>
 
-        <main style="background-color: white">
+        <main style="background-color: white;
+              padding-left: 30px; padding-right: 30px;
+              padding-top: 30px; padding-bottom: 50px;
+              margin-left: 150px; margin-right: 150px;
+              margin-bottom: 40px; margin-top: 10px;
+              border-radius: 40px">
+            <strong>Profile Information</strong><br>
 
             <table>
                 <tr>
                     <td>Name</td>
-                    <td><c:out value="${highcouncil.highcouncil_name}"/></td>
-                
+                    <td><c:out value="${advisor.advisor_name}"/></td>
+
                 </tr>
                 <tr>
                     <td>Email</td>
-                    <td><c:out value="${highcouncil.highcouncil_email}"/></td>
-                </tr>
-                <tr>
-                    <td>Phone Number</td>
-                    <td><c:out value="${highcouncil.highcouncil_phonenum}"/></td>
+                    <td><c:out value="${advisor.advisor_email}"/></td>
                 </tr>
                 <tr>
                     <td>Password</td>
-                    <td><c:out value="${highcouncil.highcouncil_password}"/></td>
+                    <td><c:out value="${advisor.advisor_password}"/></td>
                 </tr>
                 <tr>
-                    <td>Body Number</td>
-                    <td><c:out value="${highcouncil.highcouncil_bodynum}"/></td>
-                </tr>
-                <tr>
-                    <td>
-                        <a class="btn btn-success" style=" background-color: orangered;" href="edithc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Update</a><br>
-                    </td>
-                    <td>
-                        <a style="margin-top: 5px;background-color: orangered;" class="btn btn-success" 
-                           href="deletehc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>" 
-                           onclick="confirmDelete(event, this.href)">Delete Account</a>
-                    </td>
+                    <td>Phone Number</td>
+                    <td><c:out value="${advisor.advisor_phonenum}"/></td>
                 </tr>
             </table>
+            <a class="btn btn-success" style=" background-color: orangered;" 
+               href="editAdvisor?advisor_id=<c:out value="${advisor.advisor_id}"/>">Update</a><br>
+
         </main>
 
         <script type="text/javascript">

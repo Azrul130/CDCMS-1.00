@@ -35,7 +35,8 @@
                 font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
-                background-color: steelblue;
+                background-color:steelblue;
+                
             }
 
             body::before {
@@ -44,7 +45,7 @@
                 top: 0;
                 left: 0;
                 width: 100%;
-                height: 150%;
+                height: 110%;
                 background-image: url('LogoSISPA2.png');
                 background-size: 50px;
                 filter: blur(2px);
@@ -55,7 +56,7 @@
                 background-color: orange;
                 padding: 10px;
                 border:#000;
-                border-radius: 20px;
+                border-radius: 10px;
             }
 
             header {
@@ -175,14 +176,16 @@
     <body>
         <header>
             <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
-            <a href="DashboardAdvisor.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
+            <a href="DashboardMember.jsp" style="text-decoration: none;">
+                <h1>CDCMS</h1>
+            </a>
         </header>
 
-        <nav>
+       <nav>
             <ul>
-                <li><a href="<%=request.getContextPath()%>/listact">Activity</a></li>
-                <li><a href="reportactivityAdv">Report</a></li>
-                <li><a href="#">Account</a></li>
+                <li><a href="listActMember">Activity</a></li>
+                <li><a href="<%=request.getContextPath()%>/listAssetMember?member_id=<c:out value="${member.member_id}"/>">Aset</a></li>
+                <li><a href="<%=request.getContextPath()%>/viewmemberprofile?member_id=<c:out value="${member.member_id}"/>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>
@@ -190,8 +193,7 @@
         <main>
             <div class="row">
                 <div class="container">
-                    <h3  class="text-center"><strong>List of Activity</strong></h3>
-                    <hr><!-- comment -->
+                    <h3  class="text-center"><strong>Upcoming Activity</strong></h3>
                     <table id="act">
                         <tr>
                             <th>Title</th>
@@ -200,8 +202,6 @@
                             <th>Date</th>
                             <th>Time</th>
                             <th>Status</th>
-                            <th>Proposal</th>
-                            <th>Action</th>
                         </tr>
 
                         <c:forEach var="activity" items="${listAct}">
@@ -212,10 +212,6 @@
                                 <td>${activity.activity_date}</td>
                                 <td>${activity.activity_time}</td>
                                 <td>${activity.activity_status}</td>
-                                <td><a class="btn btn-success" style=" background-color: blueviolet;" href="proposal?activity_proposalname=${activity.activity_proposalname}">Download</a></td>
-                                <td>
-                                    <a class="btn btn-success" style=" background-color: orangered;" href="editact2?activity_id=${activity.activity_id}">Update</a><br>
-                                </td>
                             </tr>
                         </c:forEach>
                     </table>

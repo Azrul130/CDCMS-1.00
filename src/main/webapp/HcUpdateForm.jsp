@@ -20,14 +20,30 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CDCMS</title>
         <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color:steelblue;
-                background-image: url('LogoSISPA2.png');
-                background-size: 50px;
-            }
+  html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: steelblue;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 130%;
+            background-image: url('LogoSISPA2.png');
+            background-size: 50px;
+            filter: blur(2px);
+            z-index: -1; /* Places the image behind other content */
+        }
 
             h1 {
                 text-align: center;
@@ -163,20 +179,18 @@
 
     <body>
         <header>
-            <img src="LogoSISPA2.png" alt="CDC">
-            <h1>CDCMS</h1>
+            <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
+            <a href="Dashboard.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
         </header>
 
         <nav>
             <ul>
-                <li><a href="<%=request.getContextPath()%>/listacthc?highcouncil_id= <%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%> " 
-                       >Activity</a>
+                <li>
+                    <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
                 </li>
-                <li><a href="#">Aset</a></li>
-                <li><a href="#">Report</a></li>
-                <li style="background-color:blue; padding-top: 14px; padding-bottom: 14px;"
-                    ><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>"
-                    >Account</a></li>
+                <li><a href="<%=request.getContextPath()%>/listAsset">Aset</a></li>
+                <li><a href="reportactivityHc">Report</a></li>
+                <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>

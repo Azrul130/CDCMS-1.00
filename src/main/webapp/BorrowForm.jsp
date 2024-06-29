@@ -1,5 +1,5 @@
 <%-- 
-    Document   : AssetUpdateForm
+    Document   : BorrowForm
     Created on : 22 May 2024, 5:08:27 pm
     Author     : Azrul Hafizam
 --%>
@@ -20,16 +20,32 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Update Asset</title>
+        <title>Asset Application</title>
         <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color:steelblue;
-                background-image: url('LogoSISPA2.png');
-                background-size: 50px;
-            }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: steelblue;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('LogoSISPA2.png');
+            background-size: 50px;
+            filter: blur(2px);
+            z-index: -1; /* Places the image behind other content */
+        }
 
             h2 {
                 text-align: center;
@@ -148,6 +164,7 @@
             footer {
                 background-color: lightblue;
                 padding: 10px;
+                margin-top: 45px;
                 text-align: center;
             }
 
@@ -162,19 +179,19 @@
 
     </head>
 
+    <body>
         <header>
             <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
-            <a href="Dashboard.jsp" style="text-decoration: none;"><h1>CDCMS</h1></a>
+            <a href="DashboardMember.jsp" style="text-decoration: none;">
+                <h1>CDCMS</h1>
+            </a>
         </header>
 
-        <nav>
+       <nav>
             <ul>
-                <li>
-                    <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
-                </li>
-                <li><a href="<%=request.getContextPath()%>/listAsset">Aset</a></li>
-                <li><a href="reportactivityHc">Report</a></li>
-                <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
+                <li><a href="listActMember">Activity</a></li>
+                <li><a href="<%=request.getContextPath()%>/listAssetMember?member_id=<c:out value="${member.member_id}"/>">Aset</a></li>
+                <li><a href="<%=request.getContextPath()%>/viewmemberprofile?member_id=<c:out value="${member.member_id}"/>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>
@@ -182,26 +199,22 @@
         <main>
             <div class="form-container">
 
-                    <form action="updateAsset?asset_id=${asset.asset_id}" method="post" enctype="multipart/form-data">
-                        <h2>New Asset</h2>
-                        <label for="name">Asset Name</label>
-                        <input type="text" id="name" name="name" value="${asset.asset_name}">
-                        <label for="quantity">Quantity</label>
-                        <input type="number" id="quantity" name="quantity" value="${asset.asset_quantity}">
-                        <label for "status">Status</label>
-                        <p>Current : ${asset.asset_status}</p>
-                        <select name="status" id="status">
-                            <option value="Available">Available</option>
-                            <option value="Not Available">Not Available</option>                        
-                        </select><br>
-                                         
-                        <button type="submit">Submit</button>
-                    </form>
+                <form action="addborrow?asset_id=<c:out value="${asset.asset_id}"/>&member_id=<c:out value="${member.member_id}"/>&asset_name=<c:out value="${asset.asset_name}"/>&member_name=<c:out value="${member.member_name}"/>" 
+                      method="post" enctype="multipart/form-data">
+
+                    <h2>Asset Borrowing Form</h2>
+                    
+                    <p><strong>Borrower's Name : </strong><c:out value="${member.member_name}"/></p>
+                    <p><strong>Asset Name      : </strong><c:out value="${asset.asset_name}"/></p>
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" name="quantity" max="${asset.asset_quantity}">
+                    <button type="submit">Submit</button>
+                </form>
             </div>
         </main>
 
         <footer>
-            <p>&copy; 2022 CDCMS. All rights reserved.</p>
+            <p>&copy; 2024 CDCMS. All rights reserved.</p>
         </footer>
     </body>
 

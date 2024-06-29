@@ -26,12 +26,22 @@
             }
             body {
                 font-family: Arial, sans-serif;
-                display: flex;
-                flex-direction: column;
-                background-color:steelblue;
+                margin: 0;
+                padding: 0;
+                background-color: steelblue;
+            }
+
+            body::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
                 background-image: url('LogoSISPA2.png');
                 background-size: 50px;
-
+                filter: blur(2px);
+                z-index: -1; /* Places the image behind other content */
             }
 
             h2{
@@ -169,15 +179,18 @@
     </head>
     <body>
         <header>
-            <h1>CDCMS</h1>
+            <img src="LogoSISPA2.png" alt="CDC" class="img-fluid">
+            <a href="DashboardMember.jsp" style="text-decoration: none;">
+                <h1>CDCMS</h1>
+            </a>
         </header>
 
         <nav>
             <ul>
-                <li><a href="#">Activity</a></li>
-                <li><a href="<%=request.getContextPath()%>/listAssetMember">Aset</a></li>
+                <li><a href="listActMember">Activity</a></li>
+                <li><a href="<%=request.getContextPath()%>/listAssetMember?member_id=<c:out value="${member.member_id}"/>">Aset</a></li>
                 <li><a href="<%=request.getContextPath()%>/viewmemberprofile?member_id=<c:out value="${member.member_id}"/>">Account</a></li>
-                       <li><a href="LoginPage.jsp">Log out</a></li>
+                <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>
         </nav>
 
