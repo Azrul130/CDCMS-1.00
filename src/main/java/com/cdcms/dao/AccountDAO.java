@@ -63,6 +63,27 @@ public class AccountDAO {
 
 //HIGHCOUNCIL******************************************************************
 //add high council
+    public List<highcouncil> viewallHC() {
+        List<highcouncil> ast = new ArrayList<>();
+        try (Connection connection = getConnection(); 
+                PreparedStatement preparedStatement = connection.prepareStatement(View_All_HC);) {
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("highcouncil_id");
+                String hcname = rs.getString("highcouncil_name");
+                String hcemail = rs.getString("highcouncil_email");
+                String hcpassword = rs.getString("highcouncil_password");
+                String hcphonenum = rs.getString("highcouncil_phonenum");
+                String hcbodynum = rs.getString("highcouncil_bodynum");
+                ast.add(new highcouncil(id, hcname, hcemail, hcpassword, hcphonenum, hcbodynum ));
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return ast;
+    }
+
     public void addHC(highcouncil HC) throws SQLException {
         System.out.println(Add_New_HC);
         try {
@@ -261,8 +282,7 @@ public class AccountDAO {
 
     public boolean deleteADV(int advisor_id) throws SQLException {
         boolean rowDeleted;
-        try (Connection connection = getConnection(); 
-                PreparedStatement statement = connection.prepareStatement(Delete_Advisor);) {
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(Delete_Advisor);) {
             statement.setInt(1, advisor_id);
             rowDeleted = statement.executeUpdate() > 0;
         }

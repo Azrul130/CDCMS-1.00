@@ -199,7 +199,7 @@
                                     <li>
                                         <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
                                     </li>
-                                    <li><a href="<%=request.getContextPath()%>/listAsset">Aset</a></li>
+                                    <li><a href="<%=request.getContextPath()%>/listAsset">Asset</a></li>
                                     <li><a href="reportactivityHc">Report</a></li>
                                     <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
                                     <li><a href="LoginPage.jsp">Log out</a></li>
@@ -228,9 +228,12 @@
                                                             <th>Time</th>
                                                             <th>Status</th>
                                                         </tr>
+                                                        <%--<c:out value="${highcouncil.highcouncil_name}"/>--%>
 
                                                         <c:forEach var="activity" items="${listAct}">
+                                                            
                                                             <tr>
+                                                                
                                                                 <td>${activity.activity_id}</td>
                                                                 <td>${activity.activity_title}</td>
                                                                 <td>${activity.activity_description}</td>

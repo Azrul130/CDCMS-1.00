@@ -510,13 +510,13 @@ public class Controller extends HttpServlet {
         activity act = new activity();
         int actid = Integer.parseInt(request.getParameter("activity_id"));
         act.setActivity_id(actid);
-        act.setActivity_title(request.getParameter("title"));
-        act.setActivity_description(request.getParameter("description"));
-        act.setActivity_place(request.getParameter("place"));
-        act.setActivity_date(request.getParameter("date"));
-        act.setActivity_time(request.getParameter("time"));
+        //act.setActivity_title(request.getParameter("title"));
+        //act.setActivity_description(request.getParameter("description"));
+        //act.setActivity_place(request.getParameter("place"));
+        //act.setActivity_date(request.getParameter("date"));
+        //act.setActivity_time(request.getParameter("time"));
         act.setActivity_status(request.getParameter("status"));
-        dao2.updateActivity(act);
+        dao2.updateActStatus(act);
         response.sendRedirect("listact");
     }
 
@@ -781,7 +781,9 @@ public class Controller extends HttpServlet {
     protected void report_activityHc(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         List<activity> listAct = dao2.selectAllActivity();
+        //List<highcouncil> listhc = dao.viewallHC();
         request.setAttribute("listAct", listAct);
+        //request.setAttribute("listAct", listhc);
         RequestDispatcher dispatcher = request.getRequestDispatcher("ReportActivityHc.jsp");
         dispatcher.forward(request, response);
     }

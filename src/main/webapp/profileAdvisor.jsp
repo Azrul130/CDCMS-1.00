@@ -201,7 +201,7 @@
               margin-left: 150px; margin-right: 150px;
               margin-bottom: 40px; margin-top: 10px;
               border-radius: 40px">
-            <strong>Profile Information</strong><br>
+            <strong>Profile Information</strong><br><br>
 
             <table>
                 <tr>
@@ -221,7 +221,7 @@
                     <td>Phone Number</td>
                     <td><c:out value="${advisor.advisor_phonenum}"/></td>
                 </tr>
-            </table>
+            </table><br>
             <a class="btn btn-success" style=" background-color: orangered;" 
                href="editAdvisor?advisor_id=<c:out value="${advisor.advisor_id}"/>">Update</a><br>
 

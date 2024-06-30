@@ -31,6 +31,7 @@ public class ActivityDAO {
     private static final String select_all_activity = "select * from activity";
     private static final String delete_activity = "delete from activity where activity_id=?";
     private static final String update_activity = "update activity set activity_title=?, activity_description=?, activity_place=?, activity_date=?, activity_time=?, activity_status=? where activity_id=?";
+    private static final String update_actStatus = "update activity set activity_status=? where activity_id=?";
     private static final String select_activity_by_hcid = "select activity_id, activity_title, activity_description, activity_place, activity_date, activity_time, activity_status, activity_proposalname, activity_proposalpath, highcouncil_id from activity where highcouncil_id=?";
 
     public ActivityDAO() {
@@ -95,7 +96,7 @@ public class ActivityDAO {
                 String status = rs.getString("activity_status");
                 String proposalname = rs.getString("activity_proposalname");
                 String proposalpath = rs.getString("activity_proposalpath");
-                
+
                 act.add(new activity(id, title, des, place, date, time, status, proposalname, proposalpath));
             }
         } catch (SQLException e) {
@@ -123,6 +124,16 @@ public class ActivityDAO {
             statement.setString(5, act.getActivity_time());
             statement.setString(6, act.getActivity_status());
             statement.setInt(7, act.getActivity_id());
+            rowUpdated = statement.executeUpdate() > 0;
+        }
+        return rowUpdated;
+    }
+
+    public boolean updateActStatus(activity act) throws SQLException {
+        boolean rowUpdated;
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(update_actStatus);) {
+            statement.setString(1, act.getActivity_status());
+            statement.setInt(2, act.getActivity_id());
             rowUpdated = statement.executeUpdate() > 0;
         }
         return rowUpdated;

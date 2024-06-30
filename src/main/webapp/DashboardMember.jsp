@@ -188,7 +188,7 @@
         <nav>
             <ul>
                 <li><a href="listActMember">Activity</a></li>
-                <li><a href="<%=request.getContextPath()%>/listAssetMember?member_id=<c:out value="${member.member_id}"/>">Aset</a></li>
+                <li><a href="<%=request.getContextPath()%>/listAssetMember?member_id=<c:out value="${member.member_id}"/>">Asset</a></li>
                 <li><a href="<%=request.getContextPath()%>/viewmemberprofile?member_id=<c:out value="${member.member_id}"/>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
             </ul>

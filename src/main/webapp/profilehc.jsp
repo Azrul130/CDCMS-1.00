@@ -188,7 +188,7 @@
                 <li>
                     <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
                 </li>
-                <li><a href="<%=request.getContextPath()%>/listAsset">Aset</a></li>
+                <li><a href="<%=request.getContextPath()%>/listAsset">Asset</a></li>
                 <li><a href="reportactivityHc">Report</a></li>
                 <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
                 <li><a href="LoginPage.jsp">Log out</a></li>
@@ -201,7 +201,7 @@
               margin-left: 150px; margin-right: 150px;
               margin-bottom: 40px; margin-top: 10px;
               border-radius: 40px">
-            <strong>Profile Information</strong><br>
+            <strong>Profile Information</strong><br><br>
 
             <table>
                 <tr>
@@ -226,7 +226,8 @@
                     <td><c:out value="${highcouncil.highcouncil_bodynum}"/></td>
                 </tr>                
             </table>
-            <div style="margin-top:5px;">
+                <br>
+            <div>
                 <td>
                     <a class="btn btn-success" style=" background-color: orangered;" href="edithc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Update</a><br>
                 </td>

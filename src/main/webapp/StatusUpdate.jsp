@@ -197,7 +197,7 @@
         <main>
 
             <div class="form-container">
-                <form action="updateact2?activity_id=${activity.activity_id}&activity_proposalname=${activity.activity_proposalname}&highcouncil_id=${activity.highcouncil_id}" method="post" enctype="multipart/form-data">
+                <form action="updateact2?activity_date=${activity.activity_date}&activity_time=${activity.activity_time}&activity_place=${activity.activity_place}&activity_description=${activity.activity_description}&activity_title=${activity.activity_title}&activity_id=${activity.activity_id}&activity_proposalname=${activity.activity_proposalname}&highcouncil_id=${activity.highcouncil_id}" method="post" enctype="multipart/form-data">
                     <h1>Activity Status</h1>
                     <p><strong>Title :      </strong> ${activity.activity_title}</p>
                     <p><strong>Description :</strong> ${activity.activity_description}</p>
@@ -210,7 +210,7 @@
                     <input type="text" id="title" name="title" value="${activity.activity_title}" readonly="">
                     <label for="description">Description</label>
                     <textarea id="description" name="description" rows="5" cols="50" maxlength="200" readonly>${activity.activity_description}</textarea>
-                    <label for="place">Place</label>
+                   <%-- <label for="place">Place</label>
                     <input type="text" id="place" name="place" value="${activity.activity_place}" readonly>
                     <label for="date">Date</label>
                     <input type="date" id="date" name="date" value="${activity.activity_date}" readonly>

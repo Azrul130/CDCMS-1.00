@@ -193,7 +193,7 @@
                 <li>
                     <a href="<%=request.getContextPath()%>/listacthc?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Activity</a>
                 </li>
-                <li><a href="<%=request.getContextPath()%>/listAsset">Aset</a></li>
+                <li><a href="<%=request.getContextPath()%>/listAsset">Asset</a></li>
                 <li><a href="#">Report</a></li>
                 <li><a href="<%=request.getContextPath()%>/viewhcprofile?highcouncil_id=<%=((highcouncil) session.getAttribute("hc")).getHighcouncil_id()%>">Account</a></li>
                 <li><a id="logoutButton" href="javascript:logout()">Log out</a></li>
