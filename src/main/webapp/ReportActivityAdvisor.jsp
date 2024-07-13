@@ -189,6 +189,28 @@
                                 printWindow.document.close();
                                 printWindow.print();
                             });
+
+                            function filterActivities() {
+                                var table, tr, td, i;
+                                table = document.getElementById("act");
+                                tr = table.getElementsByTagName("tr");
+
+                                for (i = 1; i < tr.length; i++) {
+                                    td = tr[i].getElementsByTagName("td")[6];
+                                    if (td) {
+                                        var status = td.textContent || td.innerText;
+                                        if (status === "Approve" || status === "Reject") {
+                                            tr[i].style.display = "";
+                                        } else {
+                                            tr[i].style.display = "none";
+                                        }
+                                    }
+                                }
+                            }
+
+                            document.addEventListener("DOMContentLoaded", function () {
+                                filterActivities();
+                            });
                         </script>
                         </head>
 
@@ -210,14 +232,15 @@
 
                             <main>
                                 <form id="form1">
-
                                     <div class="row">
                                         <div class="container">
-                                            <h3  class="text-center"><strong>Activity Report</strong></h3>
-                                            <input class="btn btn-success" style="background-color:navy;margin-bottom: 10px;"
-                                                   type="button" value="Print Report" id="btnPrint" />
-                                            <br><!-- comment -->
-                                                <div id="dvContainer"> 
+                                            <h3 class="text-center"><strong>Activity Report</strong></h3>
+                                            <div style="margin:5px;">
+                                                <a class="btn btn-success" style="background-color:navy" id="btnPrint">Print Report</a>
+                                                <a class="btn btn-success" style="background-color:navy" href="reportassetHc">Asset Application Report</a>
+                                            </div>
+                                            <br>
+                                                <div id="dvContainer">
                                                     <table id="act">
                                                         <tr>
                                                             <th>Activity ID</th>
@@ -228,7 +251,6 @@
                                                             <th>Time</th>
                                                             <th>Status</th>
                                                         </tr>
-
                                                         <c:forEach var="activity" items="${listAct}">
                                                             <tr>
                                                                 <td>${activity.activity_id}</td>
@@ -246,6 +268,7 @@
                                     </div>
                                 </form>
                             </main>
+
 
 
                             <footer>
